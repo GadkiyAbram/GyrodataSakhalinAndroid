@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.example.gadkiyabram.gyrodatalithium">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/AppTheme">
+            <!--android:label="@string/app_name"-->
+        <activity android:name=".InitialActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity   android:name=".BatteryActivity"
+                    android:parentActivityName=".MainActivity"
+                    android:noHistory="false">
+
+        </activity>
+        <activity android:name=".JobActivity"></activity>
+        <activity android:name=".ToolActivity"></activity>
+        <activity android:name=".PrefActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN"/>-->
+
+                <!--<category android:name="android.intent.category.LAUNCHER"/>-->
+            <!--</intent-filter>-->
+        </activity>
+        <activity android:name=".JobPreciseActivity"></activity>
+        <activity android:name=".ToolPreciseActivity"></activity>
+        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".NewBatteryActivity"></activity>
+
+    </application>
+
+</manifest>

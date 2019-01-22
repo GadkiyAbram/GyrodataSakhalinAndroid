@@ -1,0 +1,8 @@
+<resources>
+    <string name="checkPref">Check your credentials</string>
+    <string name="app_name">GyrodataLithium</string>
+    <string name="toPreferences">Ok, go there</string>
+    <string name="notNow">Maybe later</string>
+    <string name="connect">Connected</string>
+    <string name="notConnect">Not connected</string>
+</resources>

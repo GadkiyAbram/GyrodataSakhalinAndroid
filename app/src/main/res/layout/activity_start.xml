@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:gravity="center"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <LinearLayout
+            android:layout_weight="1.5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="bottom"
+                android:src="@drawable/gdlogo"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_weight="1"
+            android:id="@+id/layoutInitial"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ProgressBar
+                android:id="@+id/pbHoriz"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:layout_centerHorizontal="true"
+                android:minWidth="300dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            <!--<Button-->
+                    <!--android:id="@+id/btnCloseApp"-->
+                    <!--android:visibility="invisible"-->
+                    <!--android:text="Later"-->
+                    <!--android:textAlignment="center"-->
+                    <!--android:gravity="left"-->
+                    <!--android:background="@color/colorTest"-->
+                    <!--android:layout_weight="1"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"/>-->
+
+            <Button
+                    android:id="@+id/btnGoToSettings"
+                    android:visibility="invisible"
+                    android:text="Go to settings"
+                    android:textAlignment="center"
+                    android:gravity="right"
+                    android:background="@color/colorTest"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

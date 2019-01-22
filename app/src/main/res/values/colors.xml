@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ff6347</color>
+    <color name="colorPrimaryDark">#ff6347</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="client">#DCDCDC</color>
+
+    <!-- Text color for the details of the earthquake in the list item -->
+    <color name="textColorBoxNumber">#B4BAC0</color>
+
+    <!-- Text color for the primary location of the earthquake in the list item -->
+    <color name="textColorSerialNumber">#2B3D4D</color>
+
+    <!-- Circle color for the NEW battery-->
+    <color name="newBattColor">#64DD17</color>
+
+    <!-- Circle color for the USED battery-->
+    <color name="usedBattColor">#ff0000</color>
+
+    <!--Default color for the battery, that condition is unknown-->
+    <color name="defaultColor">#FFFF00</color>
+
+    <!--Background color of the batteryitem-->
+    <color name="backGroundColor">#ECEFF1</color>
+
+    <!--Background color of the recyclerView Layout-->
+    <color name="recyclerViewGroundColor">#cfd8dc</color>
+
+    <color name="swipeButton">#FFFFFF</color>
+
+    <!--Swipe Button Background
+    <color name="swipeBtnBackground">#EEEEEE</color>-->
+    <color name="swipeBtnBackground">#FFFFFF</color>
+
+    <!--Client colors-->
+    <!--SLB-->
+    <color name="slbClient">#1E90FF</color>>
+    <color name="halClient">#FF4500</color>
+
+    <!--Background colors fro Job Precise Details-->
+    <color name="backColorJobPrecise">#40DCDCDC</color>
+    <color name="backColorLayouts">#F8F8FF</color>
+
+    <!--Background colors for tool_details-->
+    <color name="backColorToolDetails">#d3d3d3</color>
+
+    <!--Background connection status-->
+    <color name="colorStatus">#98FB98</color>
+
+    <!--TEST ONLY-->
+    <color name="colorTest">#DCDCDC</color>
+    <color name="layoutBack">#40DCDCDC</color>
+    <color name="layoutInner">#FFFFFF</color>
+
+    <!--Colors for FAB-->
+    <color name="colorTool">#C1C1C1</color>
+    <color name="colorJob">#4747E5</color>
+    <color name="colorGDTA">#FA1414</color>
+    <color name="colorBattery">#47E590</color>
+
+</resources>
