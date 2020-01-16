@@ -12,6 +12,8 @@ import java.util.List;
 
 public class DataBaseHelper extends PrefActivity{
 
+    // sqlserver    1433    Equ     aleks   aleks
+
     private String IP_ADDR = null;
     private String IP_PORT = null;
 

@@ -50,9 +50,9 @@ public class RecyclerJobAdapter extends RecyclerView.Adapter<RecyclerJobViewHold
         holder.tool.setText("GDP: " + job.get(position).getTool() + " & M: " + job.get(position).getModem());
         holder.circHrs.setText(job.get(position).getCircHrs());
         GradientDrawable circleColor = (GradientDrawable)holder.clientLogo.getBackground();
-//        int colorClient = getClientColor(holder.client.getText().toString().trim());
+        int colorClient = getClientColor(holder.client.getText().toString().trim());
         holder.clientLogo.setText(clientInfo(holder.client.getText().toString().trim()));
-//        circleColor.setColor(colorClient);
+        circleColor.setColor(colorClient);
     }
 
     @Override
