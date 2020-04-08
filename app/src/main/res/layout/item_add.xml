@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:focusableInTouchMode="true"
-              android:background="@color/backColorJobPrecise"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:focusableInTouchMode="true"
+                android:background="@color/backColorJobPrecise"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
     <ProgressBar
-            android:id="@+id/pbAddingBatteryTest"
+            android:id="@+id/pbAddingItemTest"
             android:visibility="invisible"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
@@ -30,7 +30,7 @@
                     android:id="@+id/tvTitle"
                     android:padding="7dp"
                     android:textSize="22dp"
-                    android:text="New Battery"
+                    android:text="New Item"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"/>
 
@@ -43,36 +43,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-            <EditText
-                    android:minWidth="140dp"
-                    android:hint="S1-0331-0001"
-                    android:id="@+id/edSerial1"
-                    android:background="@drawable/edittext_shape"
-                    android:textAlignment="center"
-                    android:textSize="18dp"
-                    android:textStyle="bold"
-                    android:padding="7dp"
+            <Spinner
+                    android:id="@+id/spinnerGWD"
+                    android:layout_weight="1.5"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColorLink="@android:color/background_dark"/>
+                    android:layout_height="match_parent">
+
+            </Spinner>
 
             <EditText
-                    android:hint="Invoice"
+                    android:hint="G0106H"
                     android:background="@drawable/edittext_shape"
-                    android:id="@+id/edInvoice"
+                    android:id="@+id/edItemAsset"
                     android:layout_weight="1"
-                    android:padding="7dp"
-                    android:textAlignment="center"
-                    android:textSize="16dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"/>
-
-            <EditText
-                    android:hint="Box N"
-                    android:background="@drawable/edittext_shape"
-                    android:id="@+id/edBox"
-                    android:layout_weight="1"
-                    android:inputType="number"
                     android:padding="7dp"
                     android:textAlignment="center"
                     android:textSize="16dp"
@@ -109,14 +92,14 @@
                                 android:minWidth="140dp"
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:text="Serial 2:"
+                                android:text="Arrived:"
                                 android:textSize="16dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"/>
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edSerial2"
+                                android:id="@+id/edAItemArrived"
                                 android:text=""
                                 android:textSize="16dp"
                                 android:layout_weight="1"
@@ -136,14 +119,14 @@
                                 android:minWidth="140dp"
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:text="Serial 3:"
+                                android:text="Invoice:"
                                 android:textSize="16dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"/>
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edSerial3"
+                                android:id="@+id/edItemInvoice"
                                 android:text=""
                                 android:textSize="16dp"
                                 android:layout_weight="1"
@@ -170,7 +153,7 @@
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edCCD"
+                                android:id="@+id/edItemCCD"
                                 android:text=""
                                 android:textSize="16dp"
                                 android:layout_weight="1"
@@ -190,21 +173,48 @@
                                 android:minWidth="140dp"
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:text="Manufactured:"
+                                android:text="Russian:"
                                 android:textSize="16dp"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edArrived"
-                                android:text="17/11/2016"
+                                android:id="@+id/edItemNameRussian"
+                                android:hint="Название из CCD"
                                 android:textSize="16dp"
                                 android:layout_weight="4"
                                 android:textAlignment="center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
 
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_margin="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                                android:padding="7dp"
+                                android:minWidth="140dp"
+                                android:background="@drawable/edittext_shape"
+                                android:text="Position in CCD:"
+                                android:textSize="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <EditText
+                                android:padding="7dp"
+                                android:background="@drawable/edittext_shape"
+                                android:id="@+id/edItemPosition"
+                                android:hint="1"
+                                android:textSize="16dp"
+                                android:layout_weight="1"
+                                android:textAlignment="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
                     </LinearLayout>
 
                     <LinearLayout
@@ -225,8 +235,36 @@
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edLocation"
-                                android:text="SLB Base"
+                                android:id="@+id/edItemStatus"
+                                android:hint="SLB Base"
+                                android:textSize="16dp"
+                                android:layout_weight="1"
+                                android:textAlignment="center"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_margin="3dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                        <TextView
+                                android:padding="7dp"
+                                android:minWidth="140dp"
+                                android:background="@drawable/edittext_shape"
+                                android:text="Box:"
+                                android:textSize="16dp"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"/>
+
+                        <!-- TODO Change to Spinner -->
+                        <EditText
+                                android:padding="7dp"
+                                android:background="@drawable/edittext_shape"
+                                android:id="@+id/edItemBox"
+                                android:hint="GWD Box"
                                 android:textSize="16dp"
                                 android:layout_weight="1"
                                 android:textAlignment="center"
@@ -252,50 +290,13 @@
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edContainer"
-                                android:text="GYLS-001"
+                                android:id="@+id/edItemContainer"
+                                android:hint="GYLS-001"
                                 android:textSize="16dp"
                                 android:layout_weight="1"
                                 android:textAlignment="center"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
-                    </LinearLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:id="@+id/linLayoutBottom"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:background="@color/backColorLayouts">
-
-                    <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_margin="3dp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                        <TextView
-                                android:minWidth="140dp"
-                                android:padding="7dp"
-                                android:background="@drawable/edittext_shape"
-                                android:text="Condition:"
-                                android:textSize="16dp"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-
-                        <EditText
-                                android:padding="7dp"
-                                android:background="@drawable/edittext_shape"
-                                android:id="@+id/edCondition"
-                                android:hint="New / Used"
-                                android:textAlignment="center"
-                                android:textSize="16dp"
-                                android:layout_weight="1"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"/>
-
                     </LinearLayout>
 
                 </LinearLayout>
@@ -334,7 +335,7 @@
                         <EditText
                                 android:padding="7dp"
                                 android:background="@drawable/edittext_shape"
-                                android:id="@+id/edComments"
+                                android:id="@+id/edItemComments"
                                 android:text="RU1750"
                                 android:textSize="16dp"
                                 android:layout_weight="4"
@@ -344,20 +345,31 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <com.github.chrisbanes.photoview.PhotoView
+                            android:id="@+id/imageItemPhoto"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
             </LinearLayout>
 
         </ScrollView>
 
     </LinearLayout>
 
-    <include layout="@layout/fab_back_button"/>
-
     <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fabAddBattery"
+                android:id="@+id/fabAddItem"
                 app:srcCompat="@drawable/done"
                 android:backgroundTint="@color/colorPrimary"
                 app:fabSize="normal"
@@ -367,6 +379,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fabAddItemImage"
+                app:srcCompat="@drawable/frame"
+                android:backgroundTint="@color/colorTest"
+                app:fabSize="normal"
+                android:layout_marginLeft="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_gravity="left|bottom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" app:backgroundTint="@color/backColorButton"/>
+
     </android.support.design.widget.CoordinatorLayout>
+
+
 
 </RelativeLayout>

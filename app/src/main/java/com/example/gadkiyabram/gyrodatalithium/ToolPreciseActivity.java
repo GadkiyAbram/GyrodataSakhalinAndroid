@@ -1,15 +1,23 @@
 package com.example.gadkiyabram.gyrodatalithium;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuItemImpl;
+import android.util.Base64;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
+import com.github.chrisbanes.photoview.PhotoView;
 
 public class ToolPreciseActivity extends AppCompatActivity {
 
     TextView tvId, tvToolItem, tvToolAsset, tvToolCircHrs, tvArrive,
             tvInvoice, tvCCD, tvPosCCD, tvNameRus,
             tvBoxDesc, tvContainer, tvComment, tvLocation;
+    PhotoView phItemView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,22 +37,25 @@ public class ToolPreciseActivity extends AppCompatActivity {
         tvContainer = (TextView)findViewById(R.id.tvContainer);
         tvLocation = (TextView)findViewById(R.id.tvLocation);
         tvComment = (TextView)findViewById(R.id.tvComments);
-
+        phItemView = (PhotoView)findViewById(R.id.imageItemPhoto);
 
         Intent intent = getIntent();
-        String _id = intent.getStringExtra("_id");
-        String item = intent.getStringExtra("item");
-        String asset = intent.getStringExtra("asset");
-        String circHrs = intent.getStringExtra("circHrs");
-        String arrived = intent.getStringExtra("arrived");
-        String invoice = intent.getStringExtra("invoice");
-        String ccdNum = intent.getStringExtra("ccdNum");
-        String nameRus = intent.getStringExtra("nameRus");
-        String ccdPos = intent.getStringExtra("ccdPos");
-        String location = intent.getStringExtra("location");
-        String box = intent.getStringExtra("boxDesc");
-        String container = intent.getStringExtra("container");
-        String comment = intent.getStringExtra("comment");
+        String _id = intent.getStringExtra(DataBaseHelper.ITEM_ID);
+        String item = intent.getStringExtra(DataBaseHelper.ITEM_ITEM);
+        String asset = intent.getStringExtra(DataBaseHelper.ITEM_ASSET);
+        String circHrs = intent.getStringExtra(DataBaseHelper.ITEM_CIRCULATION);
+        String arrived = intent.getStringExtra(DataBaseHelper.ITEM_ARRIVED);
+        String invoice = intent.getStringExtra(DataBaseHelper.ITEM_INVOICE);
+        String ccdNum = intent.getStringExtra(DataBaseHelper.ITEM_CCD);
+        String nameRus = intent.getStringExtra(DataBaseHelper.ITEM_NAMERUS);
+        String ccdPos = intent.getStringExtra(DataBaseHelper.ITEM_POSITION);
+        String location = intent.getStringExtra(DataBaseHelper.ITEM_STATUS);
+        String box = intent.getStringExtra(DataBaseHelper.ITEM_BOX);
+        String container = intent.getStringExtra(DataBaseHelper.ITEM_CONTAINER);
+        String comment = intent.getStringExtra(DataBaseHelper.ITEM_COMMENT);
+        String itemImage = intent.getStringExtra(DataBaseHelper.ITEM_ITEM_IMAGE);
+
+        Bitmap decodedImage = prepareImage(itemImage);
 
         tvId.setText("ID: " + _id);
         tvToolItem.setText(item.trim());
@@ -59,5 +70,13 @@ public class ToolPreciseActivity extends AppCompatActivity {
         tvLocation.setText(location.trim());
         tvContainer.setText(container.trim());
         tvComment.setText(comment.trim());
+        phItemView.setImageBitmap(decodedImage);
+    }
+
+    private Bitmap prepareImage(String imageRecievedInString){
+        Bitmap decodedImageInBytes = null;
+        byte[] imageInBytes = Base64.decode(imageRecievedInString, Base64.DEFAULT);
+        decodedImageInBytes = BitmapFactory.decodeByteArray(imageInBytes, 0, imageInBytes.length);
+        return decodedImageInBytes;
     }
 }

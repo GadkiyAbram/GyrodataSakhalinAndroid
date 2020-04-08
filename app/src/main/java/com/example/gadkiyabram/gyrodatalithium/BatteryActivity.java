@@ -1,39 +1,54 @@
 package com.example.gadkiyabram.gyrodatalithium;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.support.v7.widget.Toolbar;
+import android.widget.*;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-import java.sql.*;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
-public class BatteryActivity extends AppCompatActivity {
-    private final String LOG_TAG = "mylogs";
-    ArrayList<BatteryDetails> battery;
+public class BatteryActivity extends AppCompatActivity implements View.OnClickListener {
+    FloatingActionButton fabButtonBack;
 
     RecyclerView mRecyclerView;
     LinearLayout linLayoutrecView;
     RecyclerView.LayoutManager mLayoutManager;
     public RecyclerBatteryAdapter myAdapter;
+    EditText etBatterySearch;
 
-    SharedPreferences pref;
+    RadioButton rbSerialOne, rbStatus, rbCCD, rbInvoice;
+    String where = null;
+    String battURL = null;
+
+    SharedPreferences   shPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.battery_activity);
+
+        rbSerialOne = (RadioButton)findViewById(R.id.radioBatterySerialButton);
+        rbStatus = (RadioButton)findViewById(R.id.radioBatteryStatusButton);
+        rbCCD = (RadioButton)findViewById(R.id.radioBatteryCCDButton);
+        rbInvoice = (RadioButton)findViewById(R.id.radioBatteryInvoiceButton);
+
+        // configuring EditText
+        etBatterySearch = (EditText)findViewById(R.id.editBatterySearch);
 
         mRecyclerView = (RecyclerView)findViewById(R.id.batteryRecyclerView);
         linLayoutrecView = (LinearLayout)findViewById(R.id.linLayoutrecyclerView);
@@ -42,87 +57,120 @@ public class BatteryActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        battery = new ArrayList<>();
-        mRecyclerView.setAdapter(myAdapter);
+        fabButtonBack = (FloatingActionButton)findViewById(R.id.fabBackButton);
+        fabButtonBack.setOnClickListener(this);
 
-        new RecieveBatteries().execute();
+        battURL = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_SELECTED_BATTERIES);
+
+        new RecieveBatteries().execute(battURL + "?what=" + "" + "&where=" + "");
+
+        etBatterySearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (rbSerialOne.isChecked()){ where = "Serial 1";}
+                if (rbStatus.isChecked()) { where = "Status"; }
+                if (rbCCD.isChecked()) {where = "CCD";}
+                if (rbInvoice.isChecked()){ where = "Invoice"; }
+//                new RecieveBatteries().execute("http://192.168.0.100:8081/batteryservices/batteryservice.svc/GetSelectedBatteries?what=" + etBatterySearch.getText() + "&where=" + where);
+                new RecieveBatteries().execute(battURL + "?what=" + etBatterySearch.getText() + "&where=" + where);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
-    public class RecieveBatteries extends AsyncTask<Void, Void, ArrayList<BatteryDetails>> {
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fabBackButton:
+                BatteryActivity.this.finish();
+                break;
+            default:
+                break;
+        }
+    }
 
-        DataBaseHelper dbHelper = new DataBaseHelper();
-        String MSSQL_DB = dbHelper.getSavedPreferences(getApplicationContext(), pref).get(0);
-        String MSSQL_LOGIN = dbHelper.getSavedPreferences(getApplicationContext(), pref).get(1);
-        String MSSQL_PASS = dbHelper.getSavedPreferences(getApplicationContext(), pref).get(2);
-        String query = "select * from LBatteries order by condition";
-//        String query = "select * from LBatteries where condition='used'";             //condition=used
-//        String query = "select * from LBatteries where condition='new'";              //condition=new
-//        String query = "select * from LBatteries where serNum1='S1-0525-0062'";         //serNum1 = S10525-0062
-        ArrayList<BatteryDetails> batteryList = new ArrayList<>();
+    public class RecieveBatteries extends AsyncTask<String, Void, JSONArray> {
 
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
+        ProgressBar pbWhileLoadingBatteries;
 
         @Override
-        protected ArrayList<BatteryDetails> doInBackground(Void... voids){
-
-            try{
-                con = DriverManager.getConnection(MSSQL_DB, MSSQL_LOGIN,MSSQL_PASS);
-                if (con != null){
-                    Log.d(LOG_TAG, "Connection established");
-                    stmt = con.createStatement();
-                    rs = stmt.executeQuery(query);
-                    while (rs.next()) {
-                        Log.d(LOG_TAG, "" + rs.getString("serNum1"));
-                        int _id = rs.getInt("ID");
-                        int boxNum = rs.getInt("boxN");
-                        String condition = rs.getString(1);
-                        String serNum1 = rs.getString(2);
-                        String serNum2 = rs.getString(3);
-                        String serNum3 = rs.getString(4);
-                        String date = rs.getString(5);
-                        String status = rs.getString(6);
-                        String comment = rs.getString(7);
-                        batteryList.add(new BatteryDetails(_id, boxNum, serNum1, serNum2, serNum3,
-                                date, status, condition,comment));
-                        }
-                }
-            }catch (SQLException sqlEx) {
-//                sqlEx.printStackTrace();
-                batteryList = null;
-            }finally {
-                //close connection ,stmt and resultset here
-                if (con != null){
-                    try { con.close(); } catch(SQLException se) { /*can't do anything */ }
-                    try { stmt.close(); } catch(SQLException se) { /*can't do anything */ }
-                    try { rs.close(); } catch(SQLException se) { /*can't do anything */ }
-                }
-            }
-            return batteryList;
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbWhileLoadingBatteries = (ProgressBar)findViewById(R.id.pbBatteryTest);
+            pbWhileLoadingBatteries.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
+            pbWhileLoadingBatteries.bringToFront();
+            pbWhileLoadingBatteries.setVisibility(View.VISIBLE);
         }
 
-        @Override
-        protected void onPostExecute(ArrayList<BatteryDetails> data){
-            if (data != null){
-                myAdapter = new RecyclerBatteryAdapter(getApplicationContext(), data, new RVClickListener() {
+        protected JSONArray doInBackground(String... connUrl)
+        {
+            shPreferences = getSharedPreferences(DataBaseHelper.APP_SETTINGS, MODE_PRIVATE);
+            String token = shPreferences.getString("token", "");
+            if (connUrl.length < 1 || connUrl[0] == null){
+                return null;
+            }
+            JSONArray jsonBatteriesArrayResult = null;
+            try {
+                jsonBatteriesArrayResult = QueryUtils.getData(connUrl[0], token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return jsonBatteriesArrayResult;
+        }
+
+        protected void onPostExecute(JSONArray batteriesData){
+            ArrayList<BatteryModel> batteryList = new ArrayList<>();
+
+            if (batteriesData != null){
+
+                try {
+                    for (int i = 0; i < batteriesData.length(); i++) {
+                        JSONObject object = batteriesData.getJSONObject(i);
+                        int _id = object.getInt(DataBaseHelper.BATTERY_ID);
+                        String boxNum = object.getString(DataBaseHelper.BATTERY_BOX);
+                        String condition = object.getString(DataBaseHelper.BATTERY_CONDITION);
+                        String serNum1 = object.getString(DataBaseHelper.BATTERY_SERIALONE);
+                        String serNum2 = object.getString(DataBaseHelper.BATTERY_SERIALTWO);
+                        String serNum3 = object.getString(DataBaseHelper.BATTERY_SERIALTHR);
+                        String CCD = object.getString(DataBaseHelper.BATTERY_CCD);
+                        String invoice = object.getString(DataBaseHelper.BATTERY_INVOICE);
+                        String status = object.getString(DataBaseHelper.BATTERY_STATUS);
+                        String date = object.getString(DataBaseHelper.BATTERY_ARRIVED);
+                        String container = object.getString(DataBaseHelper.BATTERY_CONTAINER);
+                        String comment = object.getString(DataBaseHelper.BATTERY_COMMENT);
+
+                        batteryList.add(new BatteryModel(_id, boxNum, condition, serNum1, serNum2, serNum3, CCD, invoice,
+                                date, status, container, comment));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (pbWhileLoadingBatteries != null && pbWhileLoadingBatteries.isShown() == true){
+                    pbWhileLoadingBatteries.setVisibility(View.GONE);
+                }
+                myAdapter = new RecyclerBatteryAdapter(getApplicationContext(), batteryList, new RVClickListener() {
                     @Override
                     public void onItemClick(View v, int postition) {
-                        Log.d(LOG_TAG, "selected: " + data.get(postition).getSerNum1());
+                        Log.d(DataBaseHelper.LOG_TAG, "selected id: " + batteryList.get(postition).get_id() + " ### "
+                                + batteryList.get(postition).getSerNum1());
                     }
                 });
                 mRecyclerView.setAdapter(myAdapter);
                 myAdapter.notifyDataSetChanged();
-            }else {
-                Log.d(LOG_TAG, "Array is null");
-                setContentView(R.layout.layout_no_connection);
-                Button btn = (Button)findViewById(R.id.btnNoConnection);
-                btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
+            }
+            else {
+                Log.d(DataBaseHelper.LOG_TAG, "Array is null");
             }
         }
     }

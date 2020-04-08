@@ -5,4 +5,14 @@
     <string name="notNow">Maybe later</string>
     <string name="connect">Connected</string>
     <string name="notConnect">Not connected</string>
+    
+    <!-- GWD Equipment Data for Spinner-->
+    <string-array name="GWDEquipment">
+        <item>Select Item..</item>
+        <item>GDP Section</item>
+        <item>GWD Modem</item>
+        <item>GWD Bullplug</item>
+        <item>GWD Command Box</item>
+    </string-array>
+    
 </resources>

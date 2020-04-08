@@ -8,7 +8,7 @@ import android.widget.TextView;
 public class JobPreciseActivity extends AppCompatActivity {
 
     TextView tvId, tvJobNum, tvClient, tvTool,
-            tvModem, tvModemVer, tvCircHrs,
+            tvModem, tvModemVer, tvBbp, tvCircHrs, tvBattery,
             tvMaxTemp, tvSurvEng1, tvSurvEng2,
             tvEngArr1, tvEngArr2, tvEngLft1,
             tvEngLft2, tvContainer, tvContArr,
@@ -25,7 +25,9 @@ public class JobPreciseActivity extends AppCompatActivity {
         tvTool = (TextView)findViewById(R.id.tvTool);
         tvModem = (TextView)findViewById(R.id.tvModem);
         tvModemVer = (TextView)findViewById(R.id.tvModemVersion);
+        tvBbp = (TextView)findViewById(R.id.tvBbp);
         tvCircHrs = (TextView)findViewById(R.id.tvCircHrs);
+        tvBattery = (TextView)findViewById(R.id.tvBattery);
         tvMaxTemp = (TextView)findViewById(R.id.tvMaxTmp);
         tvSurvEng1 = (TextView)findViewById(R.id.tvSurvEng1);
         tvSurvEng2 = (TextView)findViewById(R.id.tvSurvEng2);
@@ -41,34 +43,38 @@ public class JobPreciseActivity extends AppCompatActivity {
         tvIssues = (TextView)findViewById(R.id.tvIssues);
 
         Intent intent = getIntent();
-        String _id = intent.getStringExtra("_id");
-        String jobNum = intent.getStringExtra("jobN");
-        String client = intent.getStringExtra("client");
-        String tool = intent.getStringExtra("tool");
-        String modem = intent.getStringExtra("modem");
-        String modemVer = intent.getStringExtra("modemVer");
-        String circHrs = intent.getStringExtra("circHrs");
-        String maxTmp = intent.getStringExtra("maxTmp");
-        String eng1 = intent.getStringExtra("eng1");
-        String eng2 = intent.getStringExtra("eng2");
-        String eng1Arr = intent.getStringExtra("eng1Arr");
-        String eng2Arr = intent.getStringExtra("eng2Arr");
-        String eng1Lft = intent.getStringExtra("eng1Lft");
-        String eng2Lft = intent.getStringExtra("eng2Lft");
-        String container = intent.getStringExtra("container");
-        String contArr = intent.getStringExtra("contArr");
-        String contLft = intent.getStringExtra("contLft");
-        String comments = intent.getStringExtra("comment");
-        String rig = intent.getStringExtra("rig");
-        String issues = intent.getStringExtra("issues");
+        String _id = intent.getStringExtra(DataBaseHelper.JOB_ID);
+        String jobNum = intent.getStringExtra(DataBaseHelper.JOB_JOBNUMBER);
+        String client = intent.getStringExtra(DataBaseHelper.JOB_CLIENT);
+        String tool = intent.getStringExtra(DataBaseHelper.JOB_GDP);
+        String modem = intent.getStringExtra(DataBaseHelper.JOB_MODEM);
+        String modemVer = intent.getStringExtra(DataBaseHelper.JOB_MODEMVERSION);
+        String bullplug = intent.getStringExtra(DataBaseHelper.JOB_BULLPLUG);
+        String circHrs = intent.getStringExtra(DataBaseHelper.JOB_CIRCULATION);
+        String battery = intent.getStringExtra(DataBaseHelper.JOB_BATTERY);
+        String maxTmp = intent.getStringExtra(DataBaseHelper.JOB_MAXTEMP);
+        String eng1 = intent.getStringExtra(DataBaseHelper.JOB_ENGINEERONE);
+        String eng2 = intent.getStringExtra(DataBaseHelper.JOB_ENGINEERTWO);
+        String eng1Arr = intent.getStringExtra(DataBaseHelper.JOB_ENG_ONE_ARRIVED);
+        String eng2Arr = intent.getStringExtra(DataBaseHelper.JOB_ENG_TWO_ARRIVED);
+        String eng1Lft = intent.getStringExtra(DataBaseHelper.JOB_ENG_ONE_LEFT);
+        String eng2Lft = intent.getStringExtra(DataBaseHelper.JOB_ENG_TWO_LEFT);
+        String container = intent.getStringExtra(DataBaseHelper.JOB_CONTAINER);
+        String contArr = intent.getStringExtra(DataBaseHelper.JOB_CONT_ARRIVED);
+        String contLft = intent.getStringExtra(DataBaseHelper.JOB_CONT_LEFT);
+        String comments = intent.getStringExtra(DataBaseHelper.JOB_COMMENT);
+        String rig = intent.getStringExtra(DataBaseHelper.JOB_RIG);
+        String issues = intent.getStringExtra(DataBaseHelper.JOB_ISSUES);
 
         tvId.setText(_id);
         tvJobNum.setText(jobNum);
         tvClient.setText(client);
         tvTool.setText(tool);
         tvModem.setText(modem);
+        tvBbp.setText(bullplug);
         tvModemVer.setText(modemVer);
         tvCircHrs.setText(circHrs);
+        tvBattery.setText(battery);
         tvMaxTemp.setText(maxTmp);
         tvSurvEng1.setText(eng1);
         tvSurvEng2.setText(eng2);

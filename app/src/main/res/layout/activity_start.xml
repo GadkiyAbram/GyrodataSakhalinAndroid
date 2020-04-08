@@ -40,39 +40,16 @@
 
     <LinearLayout
             android:layout_weight="1"
-            android:gravity="center"
+            android:gravity="center|top"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-        <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-            <!--<Button-->
-                    <!--android:id="@+id/btnCloseApp"-->
-                    <!--android:visibility="invisible"-->
-                    <!--android:text="Later"-->
-                    <!--android:textAlignment="center"-->
-                    <!--android:gravity="left"-->
-                    <!--android:background="@color/colorTest"-->
-                    <!--android:layout_weight="1"-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"/>-->
-
-            <Button
-                    android:id="@+id/btnGoToSettings"
-                    android:visibility="invisible"
-                    android:text="Go to settings"
-                    android:textAlignment="center"
-                    android:gravity="right"
-                    android:background="@color/colorTest"
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-
-        </LinearLayout>
-
+        <Button
+                android:visibility="invisible"
+                android:id="@+id/toSettings"
+                android:text="GO TO SETTINGS"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
 
     </LinearLayout>
 

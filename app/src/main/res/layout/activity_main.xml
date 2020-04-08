@@ -9,26 +9,43 @@
                 android:layout_height="match_parent">
 
     <ProgressBar
-            android:id="@+id/pbTest"
+            android:id="@+id/pbTestToken"
             android:visibility="invisible"
             android:layout_centerInParent="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-
-
 
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <android.support.v7.widget.Toolbar
-                android:id="@+id/toolBarMain"
-                android:background="@color/colorPrimary"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+        <!--<android.support.v7.widget.Toolbar-->
+                <!--android:id="@+id/toolBarMain"-->
+                <!--android:background="@color/colorPrimary"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="wrap_content">-->
 
-        </android.support.v7.widget.Toolbar>
+        <!--</android.support.v7.widget.Toolbar>-->
+
+    <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@color/layoutInner"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_gravity="bottom"
+                android:src="@drawable/gdlogo"
+                android:layout_width="wrap_content"
+                android:layout_height="72dp"/>
+
+    </LinearLayout>
 
         <LinearLayout
                 android:id="@+id/layoutBatteries"
@@ -108,6 +125,7 @@
                                 android:layout_weight="1"
                                 android:layout_gravity="right"
                                 android:textSize="10dp"
+                                android:id="@+id/textCountBatteries"
                                 android:text="67"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"/>
@@ -331,126 +349,126 @@
 
         </LinearLayout>
 
-        <LinearLayout
-                android:id="@+id/layoutWithFab"
-                android:layout_gravity="bottom|end"
+    </LinearLayout>
+
+    <LinearLayout
+            android:id="@+id/layoutWithFab"
+            android:layout_gravity="bottom|end"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <android.support.design.widget.CoordinatorLayout
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                tools:context=".MainActivity">
 
-            <android.support.design.widget.CoordinatorLayout
-                    xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    tools:context=".MainActivity">
+            <android.support.design.widget.FloatingActionButton
+                    android:id="@+id/fab_main"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:clickable="true"
+                    app:backgroundTint="@color/colorGDTA"
+                    app:fabSize="normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/baseline_add_white_24dp"/>
 
-                <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/fab_main"
-                        android:layout_gravity="bottom|end"
-                        android:layout_marginBottom="16dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:clickable="true"
-                        app:backgroundTint="@color/colorGDTA"
-                        app:fabSize="normal"
+            <LinearLayout
+                    android:gravity="center"
+                    android:id="@+id/layout_job"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="110dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="job"
+                        android:paddingRight="10dp"
+                        style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:srcCompat="@drawable/baseline_add_white_24dp"/>
+                        android:id="@+id/tvJob"/>
 
-                <LinearLayout
-                        android:gravity="center"
-                        android:id="@+id/layout_job"
-                        android:layout_gravity="bottom|end"
-                        android:layout_marginBottom="110dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:orientation="horizontal"
+                <android.support.design.widget.FloatingActionButton
+                        app:backgroundTint="@color/colorJob"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/job"
+                        android:id="@+id/fab_job"/>
 
-                    <TextView
-                            android:text="job"
-                            android:paddingRight="10dp"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tvJob"/>
+            </LinearLayout>
 
-                    <android.support.design.widget.FloatingActionButton
-                            app:backgroundTint="@color/colorJob"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            app:fabSize="mini"
-                            app:srcCompat="@drawable/job"
-                            android:id="@+id/fab_job"/>
+            <LinearLayout
+                    android:gravity="center"
+                    android:id="@+id/layout_tool"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="16dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="100dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                </LinearLayout>
-
-                <LinearLayout
-                        android:gravity="center"
-                        android:id="@+id/layout_tool"
-                        android:layout_gravity="bottom|end"
-                        android:layout_marginBottom="20dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginEnd="100dp"
-                        android:orientation="horizontal"
+                <TextView
+                        android:text="tool"
+                        android:paddingRight="10dp"
+                        style="@style/TextAppearance.AppCompat.Title"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvTool"/>
 
-                    <TextView
-                            android:text="tool"
-                            android:paddingRight="10dp"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tvTool"/>
-
-                    <android.support.design.widget.FloatingActionButton
-                            app:backgroundTint="@color/colorTool"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            app:fabSize="mini"
-                            app:srcCompat="@drawable/tool_new"
-                            android:id="@+id/fab_tool"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:gravity="center"
-                        android:id="@+id/layout_battery"
-                        android:layout_gravity="bottom|end"
-                        android:layout_marginBottom="70dp"
-                        android:layout_marginRight="16dp"
-                        android:layout_marginEnd="70dp"
-                        android:orientation="horizontal"
+                <android.support.design.widget.FloatingActionButton
+                        app:backgroundTint="@color/colorTool"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/tool_new"
+                        android:id="@+id/fab_tool"/>
 
-                    <TextView
-                            android:text="battery"
-                            android:paddingRight="10dp"
-                            style="@style/TextAppearance.AppCompat.Title"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tvBattery"/>
+            </LinearLayout>
 
-                    <android.support.design.widget.FloatingActionButton
-                            app:backgroundTint="@color/colorBattery"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            app:fabSize="mini"
-                            app:srcCompat="@drawable/battery_new"
-                            android:id="@+id/fab_battery"/>
+            <LinearLayout
+                    android:gravity="center"
+                    android:id="@+id/layout_battery"
+                    android:layout_gravity="bottom|end"
+                    android:layout_marginBottom="70dp"
+                    android:layout_marginRight="16dp"
+                    android:layout_marginEnd="70dp"
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
 
-                </LinearLayout>
+                <TextView
+                        android:text="battery"
+                        android:paddingRight="10dp"
+                        style="@style/TextAppearance.AppCompat.Title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvBattery"/>
 
-            </android.support.design.widget.CoordinatorLayout>
+                <android.support.design.widget.FloatingActionButton
+                        app:backgroundTint="@color/colorBattery"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        app:fabSize="mini"
+                        app:srcCompat="@drawable/battery_new"
+                        android:id="@+id/fab_battery"/>
 
-        </LinearLayout>
+            </LinearLayout>
+
+        </android.support.design.widget.CoordinatorLayout>
 
     </LinearLayout>
 

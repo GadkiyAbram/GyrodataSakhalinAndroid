@@ -13,19 +13,19 @@ import java.util.ArrayList;
 public class RecyclerBatteryAdapter extends RecyclerView.Adapter<RecyclerBatteryViewHolder> {
     final static String LOG_TAG = "mylogs";
     Context contex;
-    ArrayList<BatteryDetails> battery;
+    ArrayList<BatteryModel> battery;
     RVClickListener listener;
 
     public Context getContext() {
         return contex;
     }
 
-    public RecyclerBatteryAdapter(Context context, ArrayList<BatteryDetails> battery, RVClickListener listener) {
+    public RecyclerBatteryAdapter(Context context, ArrayList<BatteryModel> battery, RVClickListener listener) {
         this.contex = context;
         this.battery = battery;
         this.listener = listener;
     }
-//    public RecyclerBatteryAdapter(Context context, ArrayList<BatteryDetails> battery) {
+//    public RecyclerBatteryAdapter(Context context, ArrayList<BatteryModel> battery) {
 //        this.contex = context;
 //        this.battery = battery;
 //    }
@@ -47,7 +47,7 @@ public class RecyclerBatteryAdapter extends RecyclerView.Adapter<RecyclerBattery
     public void onBindViewHolder(RecyclerBatteryViewHolder holder, int position) {
         holder.boxNumber.setText("Pelicase: " + battery.get(position).getBoxN());
         holder.serNum1.setText(battery.get(position).getSerNum1());
-        holder.dOfManuf.setText(battery.get(position).getDate());
+        holder.dOfManuf.setText("Arrived: " + battery.get(position).getDate());
         holder.condition.setText(battery.get(position).getCondition());
         GradientDrawable circleColor = (GradientDrawable) holder.condition.getBackground();
         int colorCondition = getConditionColor(holder.condition.getText().toString().trim());
@@ -65,10 +65,10 @@ public class RecyclerBatteryAdapter extends RecyclerView.Adapter<RecyclerBattery
             color = R.color.defaultColor;
         }else{
             switch (condition){
-                case "new":
+                case "New":
                     color = R.color.newBattColor;
                     break;
-                case "used":
+                case "Used":
                     color = R.color.usedBattColor;
                     break;
             }

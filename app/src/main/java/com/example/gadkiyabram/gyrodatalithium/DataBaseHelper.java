@@ -20,71 +20,85 @@ public class DataBaseHelper extends PrefActivity{
     public static String LOG_TAG = "mylogs";
     static final String APP_SETTINGS = "U_SETTING";
 
+    // Authenticate
+    public static final String PATH_AUTHENTICATE = "/AuthServices/AuthService.svc/Authenticate";
+
+    // Batteries
+    public static final String PATH_SELECTED_BATTERIES = "/batteryservices/batteryservice.svc/GetSelectedBatteries";
+    public static final String PATH_BATTERY_ADD = "/batteryservices/batteryservice.svc/AddBattery";
+
+    // Tools
+    public static final String PATH_SELECTED_ITEMS = "/toolservices/toolservice.svc/GetCustomItems";
+    public static final String PATH_ITEM_ADD = "/toolservices/toolservice.svc/AddNewItem";
+
+    // Jobs
+    public static final String PATH_SELECTED_JOBS = "/jobservices/jobservice.svc/GetCustomJobData";
+    public static final String PATH_JOB_ADD = "/jobservices/jobservice.svc/AddNewJob";
+    public static final String PATH_JOB_INITIAL_DATA = "/JobServices/JobService.svc/GetAllDataForJobCreate";
+
     /*Columns Battery Inventory,
         LBatteries table
     */
-    public static final String DATABASE_NAME = "Equ";
-    public static final String TABLE_NAME = "LBatteries";
-    public static final String COL_ID = "_id";
-    public static final String COL_1 = "boxN";
-    public static final String COL_2 = "condition";
-    public static final String COL_3 = "serNum1";
-    public static final String COL_4 = "serNum2";
-    public static final String COL_5 = "serNum3";
-    public static final String COL_6 = "Date";
-    public static final String COL_7 = "Status";
-    public static final String COL_8 = "Comment";
+    public static final String BATTERY_ID = "Id";
+    public static final String BATTERY_BOX = "BoxNumber";
+    public static final String BATTERY_CONDITION = "BatteryCondition";
+    public static final String BATTERY_SERIALONE = "SerialOne";
+    public static final String BATTERY_SERIALTWO = "SerialTwo";
+    public static final String BATTERY_SERIALTHR = "SerialThr";
+    public static final String BATTERY_CCD = "CCD";
+    public static final String BATTERY_INVOICE = "Invoice";
+    public static final String BATTERY_STATUS = "BatteryStatus";
+    public static final String BATTERY_ARRIVED = "Arrived";
+    public static final String BATTERY_CONTAINER = "Container";
+    public static final String BATTERY_COMMENT = "Comment";
 
     /*Columns GWD Jobs List,
         GWDTracker table
     */
 
-//    public static final String DATABASE_JOBS_NAME = "GWDTracker";
-//    public static final String TABLE_JOBS_NAME = "LBatteries";
-    public static final String TABLE_JOBS_NAME = "LBatteries";
-    public static final String COL_J_ID = "id";
-    public static final String COL_J_1 = "JobN";
-    public static final String COL_J_2 = "Client";
-    public static final String COL_J_3 = "Tool";
-    public static final String COL_J_4 = "Modem";
-    public static final String COL_J_5 = "ModemVer";
-    public static final String COL_J_6 = "CircHrs";
-    public static final String COL_J_7 = "MaxTemp";
-    public static final String COL_J_8 = "SurveyEng1";
-    public static final String COL_J_9 = "SurveyEng2";
-    public static final String COL_J_10 = "Eng1arr";
-    public static final String COL_J_11 = "Eng2arr";
-    public static final String COL_J_12 = "Eng1left";
-    public static final String COL_J_13 = "Eng2left";
-    public static final String COL_J_14 = "Container";
-    public static final String COL_J_15 = "ContArr";
-    public static final String COL_J_16 = "ContLeft";
-    public static final String COL_J_17 = "Comments";
-    public static final String COL_J_18 = "Rig";
-    public static final String COL_J_19 = "Issues";
+    public static final String JOB_ID = "Id";
+    public static final String JOB_JOBNUMBER = "JobNumber";
+    public static final String JOB_CLIENT = "ClientName";
+    public static final String JOB_GDP = "GDP";
+    public static final String JOB_MODEM = "Modem";
+    public static final String JOB_MODEMVERSION = "ModemVersion";
+    public static final String JOB_BULLPLUG = "Bullplug";
+    public static final String JOB_CIRCULATION = "CirculationHours";
+    public static final String JOB_BATTERY = "Battery";
+    public static final String JOB_MAXTEMP = "MaxTemp";
+    public static final String JOB_ENGINEERONE = "EngineerOne";
+    public static final String JOB_ENGINEERTWO = "EngineerTwo";
+    public static final String JOB_ENG_ONE_ARRIVED = "eng_one_arrived";
+    public static final String JOB_ENG_TWO_ARRIVED = "eng_two_arrived";
+    public static final String JOB_ENG_ONE_LEFT = "eng_one_left";
+    public static final String JOB_ENG_TWO_LEFT = "eng_two_left";
+    public static final String JOB_CONTAINER = "Container";
+    public static final String JOB_CONT_ARRIVED = "ContainerArrived";
+    public static final String JOB_CONT_LEFT = "ContainerLeft";
+    public static final String JOB_RIG = "Rig";
+    public static final String JOB_ISSUES = "Issues";
+    public static final String JOB_COMMENT = "Comment";
 
     /*Columns GWD Tools List,
         Emp table
     */
 
-    public static final String DATABASE_TOOLS_NAME = "GWDTracker";
-    public static final String TABLE_TOOLS_NAME = "Emp";
-    public static final String COL_T_ID = "id";
-    public static final String COL_T_1 = "Item";
-    public static final String COL_T_2 = "Asset";
-    public static final String COL_T_3 = "Arrived";
-    public static final String COL_T_4 = "Invoice";
-    public static final String COL_T_5 = "CCD";
-    public static final String COL_T_6 = "NameRus";
-    public static final String COL_T_7 = "PositionCCD";
-    public static final String COL_T_8 = "Status";
-    public static final String COL_T_9 = "Box";
-    public static final String COL_T_10 = "Container";
-    public static final String COL_T_11 = "Comment";
-    public static final String COL_T_12 = "circHrs";
+    public static final String ITEM_ID = "Id";
+    public static final String ITEM_ITEM = "Item";
+    public static final String ITEM_ASSET = "Asset";
+    public static final String ITEM_ARRIVED = "Arrived";
+    public static final String ITEM_INVOICE = "Invoice";
+    public static final String ITEM_CCD = "CCD";
+    public static final String ITEM_CIRCULATION = "Circulation";
+    public static final String ITEM_NAMERUS = "NameRus";
+    public static final String ITEM_POSITION = "PositionCCD";
+    public static final String ITEM_STATUS = "ItemStatus";
+    public static final String ITEM_BOX = "Box";
+    public static final String ITEM_CONTAINER = "Container";
+    public static final String ITEM_COMMENT = "Comment";
+    public static final String ITEM_ITEM_IMAGE = "ItemImage";
 
-//    AsyncGetAll getAll = new AsyncGetAll();
-
+    // Leave as a Template
     static String connectString(String serverName,
                                 String ipAddress,
                                 String port,
@@ -102,7 +116,28 @@ public class DataBaseHelper extends PrefActivity{
         return connBuilder.toString();
     }
 
+    public static String getConnectionString(Context context, String pathWorking){
+        String finalUrl = null;
+
+        SharedPreferences shPreferences = context.getSharedPreferences(DataBaseHelper.APP_SETTINGS, Context.MODE_PRIVATE);
+
+        String url = shPreferences.getString(DataBaseHelper.URL, "");
+        String port = shPreferences.getString(DataBaseHelper.PORT, "");
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("http://")
+                .append(url)
+                .append(":")
+                .append(port)
+                .append(pathWorking);
+        finalUrl = stringBuilder.toString();
+        Log.d(DataBaseHelper.LOG_TAG, "FINAL URL ====== " + finalUrl);
+
+        return finalUrl;
+    }
+
     protected ArrayList<String> getSavedPreferences(Context context, SharedPreferences userPreferences){
+
         ArrayList<String> listPreferences = new ArrayList<>();
         userPreferences = context.getSharedPreferences(APP_SETTINGS, MODE_PRIVATE);
         String serverName = userPreferences.getString(PrefActivity.SERVER_NAME, "");

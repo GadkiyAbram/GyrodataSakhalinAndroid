@@ -17,6 +17,7 @@
 
     <LinearLayout
             android:id="@+id/linLayoutUp"
+            android:layout_margin="5dp"
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -25,7 +26,6 @@
                 android:id="@+id/tvJobNumber"
                 android:layout_weight="1"
                 android:text="RU0317GWD033"
-                android:textAlignment="center"
                 android:textSize="20dp"
                 android:textStyle="bold"
                 android:layout_width="wrap_content"
@@ -99,7 +99,7 @@
                     android:layout_height="wrap_content">
 
                 <TextView
-                        android:text="GDPM:"
+                        android:text="GDP / Modem:"
                         android:textSize="16dp"
                         android:layout_weight="5"
                         android:layout_width="wrap_content"
@@ -130,7 +130,30 @@
                     android:layout_height="wrap_content">
 
                 <TextView
-                        android:text="GDPM Version:"
+                        android:text="Bullplug:"
+                        android:textSize="16dp"
+                        android:layout_weight="5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/tvBbp"
+                        android:text="S1-0163-0001"
+                        android:textSize="16dp"
+                        android:layout_weight="2"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_margin="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="Modem Version:"
                         android:textSize="16dp"
                         android:layout_weight="2"
                         android:layout_width="wrap_content"
@@ -186,6 +209,29 @@
                         android:text="40"
                         android:textSize="16dp"
                         android:layout_weight="4"
+                        android:textAlignment="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_margin="3dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                <TextView
+                        android:text="Battery:"
+                        android:textSize="16dp"
+                        android:layout_weight="2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"/>
+                <TextView
+                        android:id="@+id/tvBattery"
+                        android:text="S1-0331-0001"
+                        android:textSize="16dp"
+                        android:layout_weight="2"
                         android:textAlignment="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"/>

@@ -1,9 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:background="@color/backColorJobPrecise"
-              android:layout_width="match_parent"
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
               android:layout_height="match_parent">
+
+    <ProgressBar
+            android:id="@+id/pbPrefTest"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <android.support.v7.widget.Toolbar
             android:background="@color/colorPrimary"
@@ -43,7 +56,7 @@
                     android:layout_margin="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/backColorLayouts"
+                    android:background="@color/swipeBtnBackground"
                     android:orientation="vertical">
 
                 <LinearLayout
@@ -57,24 +70,6 @@
                             android:textSize="18dp"
                             android:layout_margin="3dp"
                             android:textAlignment="textStart"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_margin="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-                    
-                    <EditText
-                            android:id="@+id/etServerName"
-                            android:backgroundTint="@color/textColorSerialNumber"
-                            android:hint="Server name"
-                            android:textSize="16dp"
-                            android:layout_margin="3dp"
-                            android:textAlignment="center"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 
@@ -115,23 +110,6 @@
 
                 </LinearLayout>
 
-                <LinearLayout
-                        android:orientation="horizontal"
-                        android:layout_margin="3dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
-
-                    <EditText
-                            android:id="@+id/etDbName"
-                            android:hint="DB name"
-                            android:textSize="16dp"
-                            android:backgroundTint="@color/textColorSerialNumber"
-                            android:textAlignment="center"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"/>
-
-                </LinearLayout>
-
             </LinearLayout>>
 
             <LinearLayout
@@ -140,7 +118,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:background="@color/backColorLayouts">
+                    android:background="@color/swipeBtnBackground">
 
                 <LinearLayout
                         android:orientation="horizontal"
@@ -164,6 +142,7 @@
                     <EditText
                             android:id="@+id/etUserLogin"
                             android:hint="Login"
+                            android:text="user1"
                             android:textSize="16dp"
                             android:backgroundTint="@color/textColorSerialNumber"
                             android:textAlignment="center"
@@ -181,6 +160,24 @@
                     <EditText
                             android:id="@+id/etUserPassword"
                             android:hint="Password"
+                            android:text="pass1"
+                            android:textSize="16dp"
+                            android:backgroundTint="@color/textColorSerialNumber"
+                            android:textAlignment="center"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_margin="3dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <TextView
+                            android:id="@+id/tvUserToken"
+                            android:hint="Token will appear here"
                             android:textSize="16dp"
                             android:backgroundTint="@color/textColorSerialNumber"
                             android:textAlignment="center"
@@ -192,7 +189,7 @@
             </LinearLayout>
 
             <LinearLayout
-                    android:layout_margin="5dp"
+                    android:layout_margin="3dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -205,29 +202,31 @@
                         android:layout_height="wrap_content">
 
                     <Button
-                            android:id="@+id/btnSaveAccount"
+                            android:id="@+id/btnAuthAccount"
                             android:background="@color/colorTest"
-                            android:text="SAVE"
+                            android:text="AUTH"
+                            android:textSize="16dp"
+                            android:layout_weight="1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"/>
+
+                    <Button
+                            android:id="@+id/btnSaveUrlPort"
+                            android:background="@color/colorTest"
+                            android:text="SAVE U / PORT"
                             android:textSize="16dp"
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
                     <Button
-                            android:text="TRY"
+                            android:text="TEST TOKEN"
                             android:background="@color/colorTest"
-                            android:id="@+id/btnTestConn"
+                            android:id="@+id/btnTestToken"
                             android:textSize="16dp"
                             android:layout_weight="1"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"/>
-                    <Button
-                            android:text="LOAD"
-                            android:background="@color/colorTest"
-                            android:id="@+id/btnLoadAccount"
-                            android:textSize="16dp"
-                            android:layout_weight="1"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+
                 </LinearLayout>
 
             </LinearLayout>
@@ -236,4 +235,8 @@
 
     </ScrollView>
 
-</LinearLayout>
+    </LinearLayout>
+
+    <include layout="@layout/fab_back_button"/>
+
+</RelativeLayout>

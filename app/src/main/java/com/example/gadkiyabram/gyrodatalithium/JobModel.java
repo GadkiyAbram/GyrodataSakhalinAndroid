@@ -1,13 +1,15 @@
 package com.example.gadkiyabram.gyrodatalithium;
 
-public class JobDetails {
+public class JobModel {
     private int _id;
     private String jobN;
     private String client;
-    private String tool;
+    private String gdp;
     private String modem;
     private String modemVer;
+    private String bullplug;
     private String circHrs;
+    private String battery;
     private String maxTemp;
     private String survEng1;
     private String survEng2;
@@ -18,27 +20,41 @@ public class JobDetails {
     private String container;
     private String contArr;
     private String contLft;
-    private String comments;
     private String rig;
     private String issues;
+    private String comments;
 
-    public JobDetails(int _id, String jobN,
-                      String client, String tool,
-                      String modem, String modemVer,
-                      String circHrs, String maxTemp,
-                      String survEng1, String survEng2,
-                      String engArr1, String engArr2,
-                      String engLft1, String engLft2,
-                      String container, String contArr,
-                      String contLft, String comments,
-                      String rig, String issues) {
+    public JobModel(int _id,
+                    String jobN,
+                    String client,
+                    String gdp,
+                    String modem,
+                    String modemVer,
+                    String bullplug,
+                    String circHrs,
+                    String battery,
+                    String maxTemp,
+                    String survEng1,
+                    String survEng2,
+                    String engArr1,
+                    String engArr2,
+                    String engLft1,
+                    String engLft2,
+                    String container,
+                    String contArr,
+                    String contLft,
+                    String comments,
+                    String rig,
+                    String issues) {
         this._id = _id;
         this.jobN = jobN;
         this.client = client;
-        this.tool = tool;
+        this.gdp = gdp;
         this.modem = modem;
         this.modemVer = modemVer;
+        this.bullplug = bullplug;
         this.circHrs = circHrs;
+        this.battery = battery;
         this.maxTemp = maxTemp;
         this.survEng1 = survEng1;
         this.survEng2 = survEng2;
@@ -79,11 +95,11 @@ public class JobDetails {
     }
 
     public String getTool() {
-        return tool;
+        return gdp;
     }
 
     public void setTool(String tool) {
-        this.tool = tool;
+        this.gdp = tool;
     }
 
     public String getModem() {
@@ -98,8 +114,14 @@ public class JobDetails {
         return modemVer;
     }
 
-    public void setModemVer(String modemVer) {
-        this.modemVer = modemVer;
+    public void setModemVer(String modemVer){this.modemVer = modemVer;}
+
+    public String getBullplug() {
+        return bullplug;
+    }
+
+    public void setBullplug(String bullplug) {
+        this.bullplug = bullplug;
     }
 
     public String getCircHrs() {
@@ -108,6 +130,14 @@ public class JobDetails {
 
     public void setCircHrs(String circHrs) {
         this.circHrs = circHrs;
+    }
+
+    public String getBattery() {
+        return battery;
+    }
+
+    public void setBattery(String battery) {
+        this.battery = battery;
     }
 
     public String getMaxTemp() {

@@ -1,8 +1,6 @@
 package com.example.gadkiyabram.gyrodatalithium;
 
 import android.content.Context;
-import android.graphics.drawable.GradientDrawable;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +11,14 @@ import java.util.ArrayList;
 public class RecyclerToolAdapter extends RecyclerView.Adapter<RecyclerToolViewHolder> {
     final static String LOG_TAG = "mylogs";
     Context contex;
-    ArrayList<ToolDetails> tools;
+    ArrayList<ToolModel> tools;
     RVClickListener listener;
 
     public Context getContext() {
         return contex;
     }
 
-    public RecyclerToolAdapter(Context context, ArrayList<ToolDetails> tools, RVClickListener listener) {
+    public RecyclerToolAdapter(Context context, ArrayList<ToolModel> tools, RVClickListener listener) {
         this.contex = context;
         this.tools = tools;
         this.listener = listener;
@@ -46,7 +44,6 @@ public class RecyclerToolAdapter extends RecyclerView.Adapter<RecyclerToolViewHo
         holder.toolCircHrs.setText("C/h: " + String.valueOf(tools.get(position).getCircHrs()));
         holder.toolArrived.setText(tools.get(position).getArrived().trim());
         holder.toolInvoice.setText(tools.get(position).getInvoice().trim());
-//        int colorClient = getClientColor(holder.client.getText().toString().trim());
     }
 
     @Override

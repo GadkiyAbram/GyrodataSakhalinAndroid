@@ -13,19 +13,19 @@ import java.util.ArrayList;
 public class RecyclerJobAdapter extends RecyclerView.Adapter<RecyclerJobViewHolder> {
     final static String LOG_TAG = "mylogs";
     Context contex;
-    ArrayList<JobDetails> job;
+    ArrayList<JobModel> job;
     RVClickListener listener;
 
     public Context getContext() {
         return contex;
     }
-        public RecyclerJobAdapter(Context context, ArrayList<JobDetails> job, RVClickListener listener) {
+        public RecyclerJobAdapter(Context context, ArrayList<JobModel> job, RVClickListener listener) {
         this.contex = context;
         this.job = job;
         this.listener = listener;
     }
 
-//    public RecyclerJobAdapter(Context context, ArrayList<JobDetails> job) {
+//    public RecyclerJobAdapter(Context context, ArrayList<JobModel> job) {
 //        this.contex = context;
 //        this.job = job;
 //    }
@@ -49,6 +49,7 @@ public class RecyclerJobAdapter extends RecyclerView.Adapter<RecyclerJobViewHold
         holder.client.setText(job.get(position).getClient());
         holder.tool.setText("GDP: " + job.get(position).getTool() + " & M: " + job.get(position).getModem());
         holder.circHrs.setText(job.get(position).getCircHrs());
+        holder.clientLogo.setText(clientInfo(job.get(position).getClient()));
         GradientDrawable circleColor = (GradientDrawable)holder.clientLogo.getBackground();
         int colorClient = getClientColor(holder.client.getText().toString().trim());
         holder.clientLogo.setText(clientInfo(holder.client.getText().toString().trim()));
@@ -66,10 +67,10 @@ public class RecyclerJobAdapter extends RecyclerView.Adapter<RecyclerJobViewHold
             color = R.color.defaultColor;
         }else{
             switch (client){
-                case "SLB":
+                case "Schlumberger D&M":
                     color = R.color.slbClient;
                     break;
-                case "HAL":
+                case "Halliburton":
                     color = R.color.halClient;
                     break;
             }
@@ -80,10 +81,10 @@ public class RecyclerJobAdapter extends RecyclerView.Adapter<RecyclerJobViewHold
     public String clientInfo(String client){
         String clientToSet = null;
         switch (client){
-            case "SLB":
+            case "Schlumberger D&M":
                 clientToSet = "SLB";
                 break;
-            case "HAL":
+            case "Halliburton":
                 clientToSet = "HAL";
                 break;
         }

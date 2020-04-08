@@ -1,6 +1,6 @@
 package com.example.gadkiyabram.gyrodatalithium;
 
-public class ToolDetails {
+public class ToolModel {
 
     private int _id;
     private String itemName;
@@ -15,13 +15,21 @@ public class ToolDetails {
     private String boxDesc;
     private String container;
     private String comment;
+    private String itemImage;
 
-    public ToolDetails(int _id, String itemName,
-                       String asset, String arrived, float circHrs,
-                       String invoice, String ccdNum,
-                       String nameRus, String positionCCD,
-                       String location, String boxDesc,
-                       String container, String comment) {
+    public ToolModel(int _id,
+                     String itemName,
+                     String asset,
+                     String arrived,
+                     float circHrs,
+                     String invoice,
+                     String ccdNum,
+                     String nameRus,
+                     String positionCCD,
+                     String location,
+                     String boxDesc,
+                     String container,
+                     String comment) {
         this._id = _id;
         this.itemName = itemName;
         this.asset = asset;
@@ -35,6 +43,36 @@ public class ToolDetails {
         this.boxDesc = boxDesc;
         this.container = container;
         this.comment = comment;
+    }
+
+    public ToolModel(int _id,
+                     String itemName,
+                     String asset,
+                     String arrived,
+                     float circHrs,
+                     String invoice,
+                     String ccdNum,
+                     String nameRus,
+                     String positionCCD,
+                     String location,
+                     String boxDesc,
+                     String container,
+                     String comment,
+                     String itemImage) {
+        this._id = _id;
+        this.itemName = itemName;
+        this.asset = asset;
+        this.arrived = arrived;
+        this.circHrs = circHrs;
+        this.invoice = invoice;
+        this.ccdNum = ccdNum;
+        this.nameRus = nameRus;
+        this.positionCCD = positionCCD;
+        this.location = location;
+        this.boxDesc = boxDesc;
+        this.container = container;
+        this.comment = comment;
+        this.itemImage = itemImage;
     }
 
     public int get_id() {
@@ -136,4 +174,8 @@ public class ToolDetails {
     public void setComment(String comment) {
         this.comment = comment;
     }
+
+    public String getItemImage() { return itemImage; }
+
+    public void setItemImage(String itemImage){ this.itemImage = itemImage; }
 }

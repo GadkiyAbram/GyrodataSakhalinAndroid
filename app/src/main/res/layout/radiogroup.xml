@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <RadioGroup
+            android:background="@color/swipeButton"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <RadioButton
+                android:buttonTint="@color/colorTool"
+                android:checked="true"
+                android:text="Job"
+                android:layout_weight="1"
+                android:id="@+id/radioJobNumberButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <RadioButton
+                android:buttonTint="@color/colorTool"
+                android:backgroundTint="@color/swipeBtnBackground"
+                android:text="GDP"
+                android:layout_weight="1"
+                android:id="@+id/radioJobGDPButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <RadioButton
+                android:buttonTint="@color/colorTool"
+                android:text="Modem"
+                android:layout_weight="1"
+                android:id="@+id/radioJobModemButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        <RadioButton
+                android:buttonTint="@color/colorTool"
+                android:text="BBP"
+                android:layout_weight="1"
+                android:id="@+id/radioJobBPButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+    </RadioGroup>
+
+
+</LinearLayout>

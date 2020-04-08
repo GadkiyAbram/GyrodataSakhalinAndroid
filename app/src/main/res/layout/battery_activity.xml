@@ -6,26 +6,130 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".BatteryActivity">
+        tools:context=".BatteryActivity" xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ScrollView
-            android:layout_margin="1pt"
+    <ProgressBar
+            android:id="@+id/pbBatteryTest"
+            android:visibility="invisible"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/scroll">
+            android:layout_height="wrap_content">
+
         <LinearLayout
-                android:id="@+id/linLayoutrecyclerView"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            <android.support.v7.widget.RecyclerView
-                    android:id="@+id/batteryRecyclerView"
-                    android:scrollbars="vertical"
+                android:layout_height="wrap_content">
+
+            <RadioGroup
+                    android:background="@color/swipeButton"
+                    android:orientation="horizontal"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:divider="@null"
-                    android:dividerHeight="0dp"/>
+                    android:layout_height="wrap_content">
+
+                <RadioButton
+                        android:buttonTint="@color/colorTool"
+                        android:checked="true"
+                        android:text="Serial 1"
+                        android:layout_weight="1"
+                        android:id="@+id/radioBatterySerialButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <RadioButton
+                        android:buttonTint="@color/colorTool"
+                        android:backgroundTint="@color/swipeBtnBackground"
+                        android:text="Status"
+                        android:layout_weight="1"
+                        android:id="@+id/radioBatteryStatusButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <RadioButton
+                        android:buttonTint="@color/colorTool"
+                        android:text="CCD"
+                        android:layout_weight="1"
+                        android:id="@+id/radioBatteryCCDButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+                <RadioButton
+                        android:buttonTint="@color/colorTool"
+                        android:text="Invoice"
+                        android:layout_weight="1"
+                        android:id="@+id/radioBatteryInvoiceButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"/>
+
+            </RadioGroup>
+
         </LinearLayout>
-    </ScrollView>
+
+        <LinearLayout
+                android:layout_margin="1pt"
+                android:focusableInTouchMode="true"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+            <EditText
+                    android:background="@drawable/edittext_custom"
+                    android:id="@+id/editBatterySearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="1pt"
+                    android:layout_marginBottom="1pt"
+                    android:textSize="25dp"
+                    android:hint="  your sign..."
+                    android:inputType="textPersonName"/>
+
+        </LinearLayout>
+
+        <ScrollView
+                android:layout_margin="1pt"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/scroll">
+
+            <LinearLayout
+                    android:id="@+id/linLayoutrecyclerView"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <android.support.v7.widget.RecyclerView
+                        android:id="@+id/batteryRecyclerView"
+                        android:scrollbars="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:divider="@null"
+                        android:dividerHeight="0dp"/>
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+    <include layout="@layout/fab_back_button"/>
+
+    <!--<android.support.design.widget.CoordinatorLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+
+        <!--<android.support.design.widget.FloatingActionButton-->
+                <!--android:id="@+id/fabBatteryBack"-->
+                <!--app:srcCompat="@drawable/back"-->
+                <!--android:backgroundTint="@color/backColorButton"-->
+                <!--app:fabSize="normal"-->
+                <!--android:layout_marginStart="16dp"-->
+                <!--android:layout_marginBottom="16dp"-->
+                <!--android:layout_gravity="bottom|start"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--app:backgroundTint="@color/backColorButton"/>-->
+
+    <!--</android.support.design.widget.CoordinatorLayout>-->
 
 </RelativeLayout>

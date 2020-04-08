@@ -2,28 +2,49 @@ package com.example.gadkiyabram.gyrodatalithium;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RadioButton;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ToolActivity extends AppCompatActivity {
-
-    private final String LOG_TAG = "mylogs";
-    ArrayList<ToolDetails> tool;
+public class ToolActivity extends AppCompatActivity implements View.OnClickListener {
 
     RecyclerView tRecyclerView;
     LinearLayout linLayoutrecView;
     RecyclerView.LayoutManager mLayoutManager;
     public RecyclerToolAdapter toolAdapter;
-    SharedPreferences pref;
+    EditText etItemSearch;
+    // TODO - pass it to Helper file (create or update)
+    SharedPreferences shPreferences;
+
+    RadioButton rbItem, rbAsset, rbCcd, rbInvoice;
+    String where = null;
+
+    FloatingActionButton fabButtonBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,109 +53,155 @@ public class ToolActivity extends AppCompatActivity {
 
         tRecyclerView = (RecyclerView)findViewById(R.id.toolRecyclerView);
         linLayoutrecView = (LinearLayout)findViewById(R.id.linLayoutrecyclerViewTool);
+        etItemSearch = (EditText)findViewById(R.id.editItemSearch);
 
         tRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(getApplicationContext());
         tRecyclerView.setLayoutManager(mLayoutManager);
 
-        tool = new ArrayList<>();
-        tRecyclerView.setAdapter(toolAdapter);
+        fabButtonBack = (FloatingActionButton)findViewById(R.id.fabBackButton);
+        fabButtonBack.setOnClickListener(this);
 
-        new ToolActivity.RecieveTools().execute();
+        rbItem = (RadioButton)findViewById(R.id.radioItemItemButton);
+        rbAsset = (RadioButton)findViewById(R.id.radioItemAssetButton);
+        rbCcd = (RadioButton)findViewById(R.id.radioItemCCDButton);
+        rbInvoice = (RadioButton)findViewById(R.id.radioItemInvoiceButton);
+
+        String urlFromSP = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_SELECTED_ITEMS);
+
+//        new ToolActivity.RecieveTools().execute("http://192.168.0.102:8081/toolservices/toolservice.svc/GetCustomItems?what=" + "" + "&where=" + where);
+//        new ToolActivity.RecieveTools().execute(finalUrl + DataBaseHelper.PATH_SELECTED_ITEMS + "?what=" + "" + "&where=" + where);
+        new ToolActivity.RecieveTools().execute(urlFromSP + "?what=" + "" + "&where=" + where);
+
+        etItemSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (rbItem.isChecked()){ where = "Item";}
+                if (rbAsset.isChecked()) { where = "Asset"; }
+                if (rbCcd.isChecked()) {where = "CCD";}
+                if (rbInvoice.isChecked()){ where = "Invoice"; }
+                new ToolActivity.RecieveTools().execute(urlFromSP + "?what=" + etItemSearch.getText() + "&where=" + where);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
     }
 
-    public class RecieveTools extends AsyncTask<Void, Void, ArrayList<ToolDetails>> {
-        DataBaseHelper dbHelper = new DataBaseHelper();
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fabBackButton:
+                ToolActivity.this.finish();
+                break;
+            default:
+                break;
+        }
+    }
 
-        String MSSQL_DB = dbHelper.getSavedPreferences(getApplicationContext(), pref).get(0);
-        String MSSQL_LOGIN = dbHelper.getSavedPreferences(getApplicationContext(), pref).get(1);
-        String MSSQL_PASS = dbHelper.getSavedPreferences(getApplicationContext(), pref).get(2);
-        String query = "select * from Emp order by Item";
-        ArrayList<ToolDetails> toolList = new ArrayList<>();
+    public class RecieveTools extends AsyncTask<String, Void, JSONArray> {
 
-        Connection con = null;
-        Statement stmt = null;
-        ResultSet rs = null;
+        ProgressBar pbWhileLoadingTools;
 
         @Override
-        protected ArrayList<ToolDetails> doInBackground(Void... voids) {
-
-            try {
-                con = DriverManager.getConnection(MSSQL_DB, MSSQL_LOGIN, MSSQL_PASS);
-                if (con != null){
-                    Log.d(LOG_TAG, "Connection established");
-                    stmt = con.createStatement();
-                    rs = stmt.executeQuery(query);
-                    while (rs.next()) {
-                        Log.d(LOG_TAG, "" + rs.getString("Item"));
-
-                        int _id = rs.getInt(DataBaseHelper.COL_T_ID);
-                        String item = rs.getString(DataBaseHelper.COL_T_1);
-                        String asset = rs.getString(DataBaseHelper.COL_T_2);
-                        String arrived = rs.getString(DataBaseHelper.COL_T_3);
-                        String invoice = rs.getString(DataBaseHelper.COL_T_4);
-                        String ccd = rs.getString(DataBaseHelper.COL_T_5);
-                        String nameRus = rs.getString(DataBaseHelper.COL_T_6);
-                        String posCCD = rs.getString(DataBaseHelper.COL_T_7);
-                        String status = rs.getString(DataBaseHelper.COL_T_8);
-                        String box = rs.getString(DataBaseHelper.COL_T_9);
-                        String container = rs.getString(DataBaseHelper.COL_T_10);
-                        String comment = rs.getString(DataBaseHelper.COL_T_11);
-                        float circHrs = rs.getFloat(DataBaseHelper.COL_T_12);
-                        toolList.add(new ToolDetails(_id, item, asset, arrived, circHrs, invoice,
-                                ccd, nameRus, posCCD, status, box, container, comment));
-                    }
-                }
-            } catch (SQLException sqlEx) {
-//                sqlEx.printStackTrace();
-                toolList = null;
-            } finally {
-                if (con != null){
-                    //close connection ,stmt and resultset here
-                    try {
-                        con.close();
-                    } catch (SQLException se) { /*can't do anything */ }
-                    try {
-                        stmt.close();
-                    } catch (SQLException se) { /*can't do anything */ }
-                    try {
-                        rs.close();
-                    } catch (SQLException se) { /*can't do anything */ }
-                }
-            }
-            return toolList;
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbWhileLoadingTools = (ProgressBar)findViewById(R.id.pbToolTest);
+            pbWhileLoadingTools.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
+            pbWhileLoadingTools.bringToFront();
+            pbWhileLoadingTools.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected void onPostExecute(ArrayList<ToolDetails> data) {
-            if (data != null){
-                toolAdapter = new RecyclerToolAdapter(getApplicationContext(), data, new RVClickListener() {
-                    @Override
-                    public void onItemClick(View v, int postition) {
-                        Log.d(LOG_TAG, "selected: " + toolList.get(postition).getItemName());
+        protected JSONArray doInBackground(String... connUrl)
+        {
+            shPreferences = getSharedPreferences(DataBaseHelper.APP_SETTINGS, MODE_PRIVATE);
+            String token = shPreferences.getString("token", "");
+            if (connUrl.length < 1 || connUrl[0] == null){
+                return null;
+            }
+            JSONArray jsonBatteriesArrayResult = null;
+            try {
+                jsonBatteriesArrayResult = QueryUtils.getData(connUrl[0], token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
-                        Intent intentToolDetails = new Intent(ToolActivity.this, ToolPreciseActivity.class);
-                        intentToolDetails.putExtra("_id", String.valueOf(toolList.get(postition).get_id()));
-                        intentToolDetails.putExtra("item", toolList.get(postition).getItemName());
-                        intentToolDetails.putExtra("asset", toolList.get(postition).getAsset());
-                        intentToolDetails.putExtra("circHrs", String.valueOf(toolList.get(postition).getCircHrs()));
-                        intentToolDetails.putExtra("arrived", toolList.get(postition).getArrived());
-                        intentToolDetails.putExtra("invoice", toolList.get(postition).getInvoice());
-                        intentToolDetails.putExtra("ccdNum", toolList.get(postition).getCcdNum());
-                        intentToolDetails.putExtra("nameRus", toolList.get(postition).getNameRus());
-                        intentToolDetails.putExtra("ccdPos", toolList.get(postition).getPositionCCD());
-                        intentToolDetails.putExtra("location", toolList.get(postition).getLocation());
-                        intentToolDetails.putExtra("boxDesc", toolList.get(postition).getBoxDesc());
-                        intentToolDetails.putExtra("container", toolList.get(postition).getContainer());
-                        intentToolDetails.putExtra("comment", toolList.get(postition).getComment());
+            return jsonBatteriesArrayResult;
+        }
 
-                        startActivity(intentToolDetails);
+        protected void onPostExecute(JSONArray data) {
+            ArrayList<ToolModel> toolList = new ArrayList<>();
+
+            if (data != null) {
+                try {
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject object = data.getJSONObject(i);
+                        int id = object.getInt(DataBaseHelper.ITEM_ID);
+                        String item = object.getString(DataBaseHelper.ITEM_ITEM);
+                        String asset = object.getString(DataBaseHelper.ITEM_ASSET);
+                        String arrived = object.getString(DataBaseHelper.ITEM_ARRIVED);
+                        String invoice = object.getString(DataBaseHelper.ITEM_INVOICE);
+                        String ccd = object.getString(DataBaseHelper.ITEM_CCD);
+                        float circulation = Float.parseFloat(object.getString(DataBaseHelper.ITEM_CIRCULATION));
+                        String nameRus = object.getString(DataBaseHelper.ITEM_NAMERUS);
+                        String positionCcd = object.getString(DataBaseHelper.ITEM_POSITION);
+                        String itemStatus = object.getString(DataBaseHelper.ITEM_STATUS);
+                        String box = object.getString(DataBaseHelper.ITEM_BOX);
+                        String container = object.getString(DataBaseHelper.ITEM_CONTAINER);
+                        String comment = object.getString(DataBaseHelper.ITEM_COMMENT);
+                        String itemIMage = object.getString(DataBaseHelper.ITEM_ITEM_IMAGE);
+
+                        toolList.add(new ToolModel(id, item, asset, arrived, circulation, invoice, ccd, nameRus,
+                                positionCcd, itemStatus, box, container, comment, itemIMage));
                     }
-                });
-                tRecyclerView.setAdapter(toolAdapter);
-                toolAdapter.notifyDataSetChanged();
-            }else {
-                setContentView(R.layout.layout_no_connection);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (toolList != null){
+
+                    if (pbWhileLoadingTools != null && pbWhileLoadingTools.isShown() == true){
+                        pbWhileLoadingTools.setVisibility(View.GONE);
+                    }
+
+                    toolAdapter = new RecyclerToolAdapter(getApplicationContext(), toolList, new RVClickListener() {
+                        @Override
+                        public void onItemClick(View v, int postition) {
+                            Log.d(DataBaseHelper.LOG_TAG, "selected: " + toolList.get(postition).getItemName());
+
+                            Intent intentToolDetails = new Intent(ToolActivity.this, ToolPreciseActivity.class);
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ID, String.valueOf(toolList.get(postition).get_id()));
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM, toolList.get(postition).getItemName());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ASSET, toolList.get(postition).getAsset());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CIRCULATION, String.valueOf(toolList.get(postition).getCircHrs()));
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ARRIVED, toolList.get(postition).getArrived());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_INVOICE, toolList.get(postition).getInvoice());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CCD, toolList.get(postition).getCcdNum());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_NAMERUS, toolList.get(postition).getNameRus());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_POSITION, toolList.get(postition).getPositionCCD());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_STATUS, toolList.get(postition).getLocation());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_BOX, toolList.get(postition).getBoxDesc());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CONTAINER, toolList.get(postition).getContainer());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_COMMENT, toolList.get(postition).getComment());
+                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM_IMAGE, toolList.get(postition).getItemImage());
+
+                            startActivity(intentToolDetails);
+                        }
+                    });
+                    tRecyclerView.setAdapter(toolAdapter);
+                    toolAdapter.notifyDataSetChanged();
+                }else {
+                    setContentView(R.layout.layout_no_connection);
+                }
+
             }
         }
     }
