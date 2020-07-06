@@ -16,34 +16,37 @@ public class ToolModel {
     private String container;
     private String comment;
     private String itemImage;
+    private String itemCreated;
 
-    public ToolModel(int _id,
-                     String itemName,
-                     String asset,
-                     String arrived,
-                     float circHrs,
-                     String invoice,
-                     String ccdNum,
-                     String nameRus,
-                     String positionCCD,
-                     String location,
-                     String boxDesc,
-                     String container,
-                     String comment) {
-        this._id = _id;
-        this.itemName = itemName;
-        this.asset = asset;
-        this.arrived = arrived;
-        this.circHrs = circHrs;
-        this.invoice = invoice;
-        this.ccdNum = ccdNum;
-        this.nameRus = nameRus;
-        this.positionCCD = positionCCD;
-        this.location = location;
-        this.boxDesc = boxDesc;
-        this.container = container;
-        this.comment = comment;
-    }
+//    public ToolModel(int _id,
+//                     String itemName,
+//                     String asset,
+//                     String arrived,
+//                     float circHrs,
+//                     String invoice,
+//                     String ccdNum,
+//                     String nameRus,
+//                     String positionCCD,
+//                     String location,
+//                     String boxDesc,
+//                     String container,
+//                     String comment,
+//                     String created) {
+//        this._id = _id;
+//        this.itemName = itemName;
+//        this.asset = asset;
+//        this.arrived = arrived;
+//        this.circHrs = circHrs;
+//        this.invoice = invoice;
+//        this.ccdNum = ccdNum;
+//        this.nameRus = nameRus;
+//        this.positionCCD = positionCCD;
+//        this.location = location;
+//        this.boxDesc = boxDesc;
+//        this.container = container;
+//        this.comment = comment;
+//        this.itemCreated = created;
+//    }
 
     public ToolModel(int _id,
                      String itemName,
@@ -58,7 +61,8 @@ public class ToolModel {
                      String boxDesc,
                      String container,
                      String comment,
-                     String itemImage) {
+                     String itemImage,
+                     String created) {
         this._id = _id;
         this.itemName = itemName;
         this.asset = asset;
@@ -73,6 +77,7 @@ public class ToolModel {
         this.container = container;
         this.comment = comment;
         this.itemImage = itemImage;
+        this.itemCreated = created;
     }
 
     public int get_id() {
@@ -178,4 +183,8 @@ public class ToolModel {
     public String getItemImage() { return itemImage; }
 
     public void setItemImage(String itemImage){ this.itemImage = itemImage; }
+
+    public String getItemCreated() { return itemCreated; }
+
+    public void setItemCreated(String itemCreated){ this.itemCreated = itemCreated; }
 }

@@ -14,10 +14,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+import android.widget.*;
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.*;
@@ -41,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     SharedPreferences shPreferences;
     String serverName, ipAddress, port, dbName, login, pass;
     String connection;
+
+    TextView tvCreatedAt, tvTotalItems;
 
     RelativeLayout mainLayout;
 
@@ -86,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fabJob.setOnClickListener(this);
 
         fabMain.setOnClickListener(this);
+
+        tvCreatedAt = (TextView)findViewById(R.id.tools_updated);
+        tvTotalItems = (TextView)findViewById(R.id.items_total);
 
 //        new TestTokenConnection().execute("http://192.168.0.100:8081/TestServices/TestTokenService.svc/Test");
     }
@@ -175,10 +179,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbWhileTestingToken = (ProgressBar)findViewById(R.id.pbTestToken);
-            pbWhileTestingToken.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
-            pbWhileTestingToken.bringToFront();
-            pbWhileTestingToken.setVisibility(View.VISIBLE);
+//            pbWhileTestingToken = (ProgressBar)findViewById(R.id.pbTestToken);
+//            pbWhileTestingToken.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
+//            pbWhileTestingToken.bringToFront();
+//            pbWhileTestingToken.setVisibility(View.VISIBLE);
         }
 
         @Override
@@ -229,12 +233,137 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         protected void onPostExecute(String result) {
             Log.d(DataBaseHelper.LOG_TAG, "RESULT: " + result);
             super.onPostExecute(result);
-            if (pbWhileTestingToken != null && pbWhileTestingToken.isShown() == true){
-                pbWhileTestingToken.setVisibility(View.GONE);
-            }
-            Log.d(LOG_TAG, "Token is " + result);
+        }
+    }
 
-//            if (result == "true"){ DataBaseHelper.GRANTED = "true"; }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(LOG_TAG, "MainActivity: onResume()");
+        new RecieveTools().execute("http://192.168.0.102:8081/toolServices/toolService.svc/GetCustomItems?what=" + "" + "&where=");
+    }
+
+    @Override
+    public void onDestroy(){
+        shPreferences = this.getSharedPreferences(DataBaseHelper.APP_SETTINGS,MODE_PRIVATE);
+        shPreferences.edit().clear().commit();
+        Log.d(LOG_TAG, "Preferences cleared");
+        super.onDestroy();
+    }
+
+    // TODO - REFACTOR THIS
+
+    public class RecieveTools extends AsyncTask<String, Void, JSONArray> {
+
+        ProgressBar pbWhileLoadingTools;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            pbWhileLoadingTools = (ProgressBar)findViewById(R.id.pbToolTest);
+//            pbWhileLoadingTools.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
+//            pbWhileLoadingTools.bringToFront();
+//            pbWhileLoadingTools.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected JSONArray doInBackground(String... connUrl)
+        {
+            shPreferences = getSharedPreferences(DataBaseHelper.APP_SETTINGS, MODE_PRIVATE);
+            String token = shPreferences.getString("token", "");
+            if (connUrl.length < 1 || connUrl[0] == null){
+                return null;
+            }
+            JSONArray jsonBatteriesArrayResult = null;
+            try {
+                jsonBatteriesArrayResult = QueryUtils.getData(connUrl[0], token);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return jsonBatteriesArrayResult;
+        }
+
+        protected void onPostExecute(JSONArray data) {
+            ArrayList<ToolModel> toolList = new ArrayList<>();
+
+            if (data != null) {
+                try {
+                    for (int i = 0; i < data.length(); i++) {
+                        JSONObject object = data.getJSONObject(i);
+                        int id = object.getInt(DataBaseHelper.ITEM_ID);
+                        String item = object.getString(DataBaseHelper.ITEM_ITEM);
+                        String asset = object.getString(DataBaseHelper.ITEM_ASSET);
+                        String arrived = object.getString(DataBaseHelper.ITEM_ARRIVED);
+                        String invoice = object.getString(DataBaseHelper.ITEM_INVOICE);
+                        String ccd = object.getString(DataBaseHelper.ITEM_CCD);
+                        float circulation = Float.parseFloat(object.getString(DataBaseHelper.ITEM_CIRCULATION));
+                        String nameRus = object.getString(DataBaseHelper.ITEM_NAMERUS);
+                        String positionCcd = object.getString(DataBaseHelper.ITEM_POSITION);
+                        String itemStatus = object.getString(DataBaseHelper.ITEM_STATUS);
+                        String box = object.getString(DataBaseHelper.ITEM_BOX);
+                        String container = object.getString(DataBaseHelper.ITEM_CONTAINER);
+                        String comment = object.getString(DataBaseHelper.ITEM_COMMENT);
+                        String itemIMage = object.getString(DataBaseHelper.ITEM_ITEM_IMAGE);
+                        //remove if issues
+                        String itemCreated = object.getString(DataBaseHelper.ITEM_ITEM_CREATED);
+                        Log.d(LOG_TAG, "Items updated: " + itemCreated);
+
+                        toolList.add(new ToolModel(id, item, asset, arrived, circulation, invoice, ccd, nameRus,
+                                positionCcd, itemStatus, box, container, comment, itemIMage, itemCreated));
+                    }
+
+                    // Getting last record in toolList
+                    String itemsUpdated = toolList.get(toolList.size() - 1).getItemCreated();
+                    String itemsInDB = String.valueOf(toolList.size());
+                    Log.d(LOG_TAG, "Items updated: " + itemsUpdated);
+                    Log.d(LOG_TAG, "Items total: " + itemsInDB);
+
+                    tvCreatedAt.setText(itemsUpdated);
+                    tvTotalItems.setText(itemsInDB);
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (toolList != null){
+
+//                    if (pbWhileLoadingTools != null && pbWhileLoadingTools.isShown() == true){
+//                        pbWhileLoadingTools.setVisibility(View.GONE);
+//                    }
+
+
+
+//                    toolAdapter = new RecyclerToolAdapter(getApplicationContext(), toolList, new RVClickListener() {
+//                        @Override
+//                        public void onItemClick(View v, int postition) {
+//                            Log.d(DataBaseHelper.LOG_TAG, "selected: " + toolList.get(postition).getItemName());
+//
+//                            Intent intentToolDetails = new Intent(ToolActivity.this, ToolPreciseActivity.class);
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ID, String.valueOf(toolList.get(postition).get_id()));
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM, toolList.get(postition).getItemName());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ASSET, toolList.get(postition).getAsset());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CIRCULATION, String.valueOf(toolList.get(postition).getCircHrs()));
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ARRIVED, toolList.get(postition).getArrived());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_INVOICE, toolList.get(postition).getInvoice());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CCD, toolList.get(postition).getCcdNum());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_NAMERUS, toolList.get(postition).getNameRus());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_POSITION, toolList.get(postition).getPositionCCD());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_STATUS, toolList.get(postition).getLocation());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_BOX, toolList.get(postition).getBoxDesc());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CONTAINER, toolList.get(postition).getContainer());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_COMMENT, toolList.get(postition).getComment());
+//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM_IMAGE, toolList.get(postition).getItemImage());
+//
+//                            startActivity(intentToolDetails);
+//                        }
+//                    });
+//                    tRecyclerView.setAdapter(toolAdapter);
+//                    toolAdapter.notifyDataSetChanged();
+                }else {
+                    setContentView(R.layout.layout_no_connection);
+                }
+            }
         }
     }
 

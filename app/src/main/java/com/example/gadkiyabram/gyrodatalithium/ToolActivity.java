@@ -113,7 +113,7 @@ public class ToolActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbWhileLoadingTools = (ProgressBar)findViewById(R.id.pbToolTest);
+            pbWhileLoadingTools = (ProgressBar)findViewById(R.id.pbWaiting);
             pbWhileLoadingTools.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
             pbWhileLoadingTools.bringToFront();
             pbWhileLoadingTools.setVisibility(View.VISIBLE);
@@ -157,10 +157,12 @@ public class ToolActivity extends AppCompatActivity implements View.OnClickListe
                         String box = object.getString(DataBaseHelper.ITEM_BOX);
                         String container = object.getString(DataBaseHelper.ITEM_CONTAINER);
                         String comment = object.getString(DataBaseHelper.ITEM_COMMENT);
-                        String itemIMage = object.getString(DataBaseHelper.ITEM_ITEM_IMAGE);
+                        String itemImage = object.getString(DataBaseHelper.ITEM_ITEM_IMAGE);
+                        String itemCreated = object.getString(DataBaseHelper.ITEM_ITEM_CREATED);
 
                         toolList.add(new ToolModel(id, item, asset, arrived, circulation, invoice, ccd, nameRus,
-                                positionCcd, itemStatus, box, container, comment, itemIMage));
+                                positionCcd, itemStatus, box, container, comment, itemImage, itemCreated));
+                        Log.d(DataBaseHelper.LOG_TAG, "Image: " + itemImage);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -192,6 +194,8 @@ public class ToolActivity extends AppCompatActivity implements View.OnClickListe
                             intentToolDetails.putExtra(DataBaseHelper.ITEM_CONTAINER, toolList.get(postition).getContainer());
                             intentToolDetails.putExtra(DataBaseHelper.ITEM_COMMENT, toolList.get(postition).getComment());
                             intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM_IMAGE, toolList.get(postition).getItemImage());
+                            Log.d(DataBaseHelper.LOG_TAG, "Image: " + toolList.get(postition).getItemImage());
+                            Log.d(DataBaseHelper.LOG_TAG, "Comment: " + toolList.get(postition).getComment());
 
                             startActivity(intentToolDetails);
                         }
@@ -201,7 +205,6 @@ public class ToolActivity extends AppCompatActivity implements View.OnClickListe
                 }else {
                     setContentView(R.layout.layout_no_connection);
                 }
-
             }
         }
     }

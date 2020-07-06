@@ -37,6 +37,47 @@ public class QueryUtils {
         return jsonArray;
     }
 
+    // getting config data
+    public static <T> JSONArray getConfigData(String requestUrl) throws JSONException {
+        URL url = createUrl(requestUrl);
+
+        String jsonResponse = null;
+        try{
+            jsonResponse = makeHttpGetRequestNoToken(url);
+        }catch (IOException ex){
+            ex.printStackTrace();
+        }
+
+        JSONArray jsonArray = extractData(jsonResponse);
+        return jsonArray;
+    }
+
+    private static String makeHttpGetRequestNoToken(URL url) throws IOException{
+        String response = null;
+
+        if (url == null){ return response; }
+
+        HttpURLConnection conn = null;
+
+        try{
+            conn = (HttpURLConnection) url.openConnection();
+            conn.addRequestProperty("Content-Type", "application/json; charset=utf-8");
+            conn.setRequestMethod("GET");
+
+            int result = conn.getResponseCode();
+            if (result == 200){
+                InputStream in = conn.getInputStream();
+                response = readFromStream(in);
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return response;
+    }
+
+
+
+
     private static String makeHttpGetRequest(URL url, String token) throws IOException{
         String response = null;
 

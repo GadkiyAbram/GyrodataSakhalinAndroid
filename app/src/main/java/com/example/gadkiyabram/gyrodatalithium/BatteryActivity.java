@@ -1,5 +1,6 @@
 package com.example.gadkiyabram.gyrodatalithium;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -105,7 +106,7 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbWhileLoadingBatteries = (ProgressBar)findViewById(R.id.pbBatteryTest);
+            pbWhileLoadingBatteries = (ProgressBar)findViewById(R.id.pbWaiting);
             pbWhileLoadingBatteries.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
             pbWhileLoadingBatteries.bringToFront();
             pbWhileLoadingBatteries.setVisibility(View.VISIBLE);
@@ -156,18 +157,37 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
                     e.printStackTrace();
                 }
 
-                if (pbWhileLoadingBatteries != null && pbWhileLoadingBatteries.isShown() == true){
-                    pbWhileLoadingBatteries.setVisibility(View.GONE);
-                }
-                myAdapter = new RecyclerBatteryAdapter(getApplicationContext(), batteryList, new RVClickListener() {
-                    @Override
-                    public void onItemClick(View v, int postition) {
-                        Log.d(DataBaseHelper.LOG_TAG, "selected id: " + batteryList.get(postition).get_id() + " ### "
-                                + batteryList.get(postition).getSerNum1());
+                if (batteryList != null){
+                    if (pbWhileLoadingBatteries != null && pbWhileLoadingBatteries.isShown() == true){
+                        pbWhileLoadingBatteries.setVisibility(View.GONE);
                     }
-                });
-                mRecyclerView.setAdapter(myAdapter);
-                myAdapter.notifyDataSetChanged();
+                    myAdapter = new RecyclerBatteryAdapter(getApplicationContext(), batteryList, new RVClickListener() {
+                        @Override
+                        public void onItemClick(View v, int position) {
+                            Log.d(DataBaseHelper.LOG_TAG, "selected id: " + batteryList.get(position).get_id() + " ### "
+                                    + batteryList.get(position).getSerNum1());
+
+                            Intent intentBatteryDetails = new Intent(BatteryActivity.this, BatteryPreciseActivity.class);
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_ID, String.valueOf(batteryList.get(position).get_id()));
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_BOX, batteryList.get(position).getBoxN());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_CONDITION, batteryList.get(position).getCondition());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_SERIALONE, batteryList.get(position).getSerNum1());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_SERIALTWO, batteryList.get(position).getSerNum2());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_SERIALTHR, batteryList.get(position).getSerNum3());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_CCD, batteryList.get(position).getCCD());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_INVOICE, batteryList.get(position).getInvoice());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_ARRIVED, batteryList.get(position).getDate());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_STATUS, batteryList.get(position).getStatus());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_CONTAINER, batteryList.get(position).getContainer());
+                            intentBatteryDetails.putExtra(DataBaseHelper.BATTERY_COMMENT, batteryList.get(position).getComment());
+
+                            startActivity(intentBatteryDetails);
+                        }
+                    });
+                    mRecyclerView.setAdapter(myAdapter);
+                    myAdapter.notifyDataSetChanged();
+                }
+
             }
             else {
                 Log.d(DataBaseHelper.LOG_TAG, "Array is null");

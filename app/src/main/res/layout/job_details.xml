@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:background="@color/backColorJobPrecise"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
-
-    <LinearLayout
-            android:layout_margin="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:background="@color/backColorLayouts"
-            android:orientation="vertical">
-
-    </LinearLayout>
 
     <LinearLayout
             android:id="@+id/linLayoutUp"
@@ -486,4 +476,6 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <include layout="@layout/fab_back_button"/>
+
+</RelativeLayout>

@@ -2,10 +2,12 @@ package com.example.gadkiyabram.gyrodatalithium;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
-public class JobPreciseActivity extends AppCompatActivity {
+public class JobPreciseActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView tvId, tvJobNum, tvClient, tvTool,
             tvModem, tvModemVer, tvBbp, tvCircHrs, tvBattery,
@@ -14,10 +16,15 @@ public class JobPreciseActivity extends AppCompatActivity {
             tvEngLft2, tvContainer, tvContArr,
             tvContLft, tvComments, tvRig, tvIssues;
 
+    FloatingActionButton fabButtonBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.job_details);
+
+        fabButtonBack = (FloatingActionButton)findViewById(R.id.fabBackButton);
+        fabButtonBack.setOnClickListener(this);
 
         tvId = (TextView)findViewById(R.id.tvId);
         tvJobNum = (TextView)findViewById(R.id.tvJobNumber);
@@ -88,5 +95,16 @@ public class JobPreciseActivity extends AppCompatActivity {
         tvComments.setText(comments);
         tvRig.setText(rig);
         tvIssues.setText(issues);
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fabBackButton:
+                JobPreciseActivity.this.finish();
+                break;
+            default:
+                break;
+        }
     }
 }

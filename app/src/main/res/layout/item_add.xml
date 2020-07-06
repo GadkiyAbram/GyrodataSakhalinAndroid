@@ -348,11 +348,13 @@
                 <LinearLayout
                         android:orientation="horizontal"
                         android:layout_gravity="center"
+                        android:minHeight="300dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
                     <com.github.chrisbanes.photoview.PhotoView
                             android:id="@+id/imageItemPhoto"
+                            android:minHeight="300dp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"/>
 

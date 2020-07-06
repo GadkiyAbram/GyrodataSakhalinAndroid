@@ -136,7 +136,10 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                 if (file.exists()){
                     initialized = true;
                 } else {
-
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                    FileOutputStream s = new FileOutputStream(file, false);
+                    initialized = true;
                 }
                 while (value < 100){
                     value = value + 5;
@@ -144,6 +147,8 @@ public class StartActivity extends AppCompatActivity implements View.OnClickList
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
             } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 

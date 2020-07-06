@@ -8,12 +8,14 @@
         android:orientation="vertical"
         tools:context=".BatteryActivity">
 
-    <ProgressBar
-            android:id="@+id/pbJobTest"
-            android:visibility="invisible"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <!--<ProgressBar-->
+            <!--android:id="@+id/pbJobTest"-->
+            <!--android:visibility="invisible"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+
+    <include layout="@layout/progress_bar"/>
 
     <LinearLayout
             android:layout_margin="5dp"

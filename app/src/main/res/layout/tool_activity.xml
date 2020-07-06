@@ -11,12 +11,14 @@
     <!-- TODO: Refactor to fragment
     https://guides.codepath.com/android/creating-and-using-fragments-->
 
-    <ProgressBar
-            android:id="@+id/pbToolTest"
-            android:visibility="invisible"
-            android:layout_centerInParent="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+    <!--<ProgressBar-->
+            <!--android:id="@+id/pbToolTest"-->
+            <!--android:visibility="invisible"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"/>-->
+
+    <include layout="@layout/progress_bar"/>
 
     <LinearLayout
             android:orientation="vertical"
@@ -72,6 +74,7 @@
     </LinearLayout>
 
         <LinearLayout
+                android:focusableInTouchMode="true"
                 android:layout_margin="1pt"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

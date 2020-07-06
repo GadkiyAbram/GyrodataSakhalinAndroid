@@ -4,25 +4,32 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.menu.MenuItemImpl;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.github.chrisbanes.photoview.PhotoView;
 
-public class ToolPreciseActivity extends AppCompatActivity {
+public class ToolPreciseActivity extends AppCompatActivity implements View.OnClickListener{
 
     TextView tvId, tvToolItem, tvToolAsset, tvToolCircHrs, tvArrive,
             tvInvoice, tvCCD, tvPosCCD, tvNameRus,
             tvBoxDesc, tvContainer, tvComment, tvLocation;
     PhotoView phItemView;
 
+    FloatingActionButton fabButtonBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tool_details);
+
+        fabButtonBack = (FloatingActionButton)findViewById(R.id.fabBackButton);
+        fabButtonBack.setOnClickListener(this);
 
         tvId = (TextView)findViewById(R.id.tvId);
         tvToolItem = (TextView)findViewById(R.id.tvToolItem);
@@ -55,8 +62,6 @@ public class ToolPreciseActivity extends AppCompatActivity {
         String comment = intent.getStringExtra(DataBaseHelper.ITEM_COMMENT);
         String itemImage = intent.getStringExtra(DataBaseHelper.ITEM_ITEM_IMAGE);
 
-        Bitmap decodedImage = prepareImage(itemImage);
-
         tvId.setText("ID: " + _id);
         tvToolItem.setText(item.trim());
         tvToolAsset.setText(asset.trim());
@@ -70,7 +75,23 @@ public class ToolPreciseActivity extends AppCompatActivity {
         tvLocation.setText(location.trim());
         tvContainer.setText(container.trim());
         tvComment.setText(comment.trim());
-        phItemView.setImageBitmap(decodedImage);
+
+        if (itemImage != null){
+            Bitmap decodedImage = prepareImage(itemImage);
+            phItemView.setImageBitmap(decodedImage);
+        }
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.fabBackButton:
+                ToolPreciseActivity.this.finish();
+                break;
+            default:
+                break;
+        }
     }
 
     private Bitmap prepareImage(String imageRecievedInString){

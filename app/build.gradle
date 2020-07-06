@@ -20,7 +20,18 @@ android {
         targetCompatibility 1.8
         sourceCompatibility 1.8
     }
-    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/BatteryLayouts'] } }
+    sourceSets {
+        main {
+            res.srcDirs =
+                    [
+                            'src/main/res/layout/BatteryLayouts',
+                            'src/main/res/layout/JobLayouts',
+                            'src/main/res/layout/ToolLayouts',
+                            'src/main/res/layout',
+                            'src/main/res',
+                    ]
+        }
+    }
 }
 
 dependencies {

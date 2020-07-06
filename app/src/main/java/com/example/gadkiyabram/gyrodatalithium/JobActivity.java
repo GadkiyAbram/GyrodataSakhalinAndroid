@@ -103,7 +103,7 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pbWhileLoadingJobs = (ProgressBar)findViewById(R.id.pbJobTest);
+            pbWhileLoadingJobs = (ProgressBar)findViewById(R.id.pbWaiting);
             pbWhileLoadingJobs.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
             pbWhileLoadingJobs.bringToFront();
             pbWhileLoadingJobs.setVisibility(View.VISIBLE);

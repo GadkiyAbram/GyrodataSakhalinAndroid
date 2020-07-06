@@ -35,6 +35,8 @@ public class AddJobActivity extends AppCompatActivity implements View.OnClickLis
     String addJobURL = null;
     String jobInitData = null;
 
+    // TODO - add back button action
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,6 +102,7 @@ public class AddJobActivity extends AppCompatActivity implements View.OnClickLis
 
     @Override
     public void onClick(View view) {
+
         new AddJob().execute(addJobURL);
     }
 

@@ -25,15 +25,22 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class PrefActivity extends AppCompatActivity implements View.OnClickListener {
 
     private final String LOG_TAG = "myLogs";
 
     TextView    tvUserToken;
-    EditText    etIpAddress, etPort,
+    EditText
+//                etIpAddress, etPort,
                 etUserLogin, etUserPass;
-    Button      btnAuthAcc, btnTestToken, btnSaveUrlPort;
+
+    Button      btnAuthAcc,
+//                btnTestToken,
+                btnRefresh;
 
     SharedPreferences   shPreferences;
     ProgressBar         pbWhileLoadingPrefs;
@@ -60,36 +67,41 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         fabButtonBack = (FloatingActionButton)findViewById(R.id.fabBackButton);
         fabButtonBack.setOnClickListener(this);
 
-        pbWhileLoadingPrefs = (ProgressBar)findViewById(R.id.pbPrefTest);
+//        pbWhileLoadingPrefs = (ProgressBar)findViewById(R.id.pbLoadingConfig);
+        pbWhileLoadingPrefs = (ProgressBar)findViewById(R.id.pbWaiting);
 
         tvUserToken = (TextView)findViewById(R.id.tvUserToken);
 
-        etIpAddress = (EditText)findViewById(R.id.etIp);
-        etPort = (EditText)findViewById(R.id.etPort);
+//        etIpAddress = (EditText)findViewById(R.id.etIp);
+//        etPort = (EditText)findViewById(R.id.etPort);
 
         etUserLogin = (EditText)findViewById(R.id.etUserLogin);
         etUserPass = (EditText)findViewById(R.id.etUserPassword);
 
-        btnSaveUrlPort = (Button)findViewById(R.id.btnSaveUrlPort);
-        btnSaveUrlPort.setOnClickListener(this);
 
-        btnTestToken = (Button)findViewById(R.id.btnTestToken);
-        btnTestToken.setOnClickListener(this);
+//        btnTestToken = (Button)findViewById(R.id.btnRefresh);
+//        btnTestToken.setOnClickListener(this);
 
         btnAuthAcc = (Button)findViewById(R.id.btnAuthAccount);
         btnAuthAcc.setOnClickListener(this);
 
+        btnRefresh = (Button)findViewById(R.id.btnRefresh);
+        btnRefresh.setOnClickListener(this);
+
         authURL = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_AUTHENTICATE);
 
         getUrlAndPort();
+
+//        new GetConfigData().execute("http://192.168.0.102:8081/AuthServices/AuthService.svc/sentConfig");
+        new GetConfigData().execute(DataBaseHelper.PATH_CONFIG_DATA);
     }
 
     private void getUrlAndPort(){
         SharedPreferences shPreferences = getSharedPreferences(DataBaseHelper.APP_SETTINGS, MODE_PRIVATE);
         String url = shPreferences.getString("url", "");
         String port = shPreferences.getString("port", "");
-        etIpAddress.setText(url);
-        etPort.setText(port);
+//        etIpAddress.setText(url);
+//        etPort.setText(port);
     }
 
     @Override
@@ -98,13 +110,13 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.fabBackButton:
                 PrefActivity.this.finish();
                 break;
-            case R.id.btnSaveUrlPort:
-                String url = etIpAddress.getText().toString();
-                String port = etPort.getText().toString();
-                saveUrlAndPort(url, port);
-                break;
-            case R.id.btnTestToken:
-//                new TestTokenConnection().execute("http://192.168.0.102:8081/TestServices/TestTokenService.svc/Test");
+//            case R.id.btnSaveUrlPort:
+//                String url = etIpAddress.getText().toString();
+//                String port = etPort.getText().toString();
+//                saveUrlAndPort(url, port);
+//                break;
+            case R.id.btnRefresh:
+                new GetConfigData().execute(DataBaseHelper.PATH_CONFIG_DATA);
                 break;
             case R.id.btnAuthAccount:
                 new AuthorizeAccount().execute(authURL);
@@ -135,6 +147,65 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         editor.putString(PORT, port);
         editor.commit();
         Toast.makeText(this, "URL & PORT saved", Toast.LENGTH_SHORT).show();
+    }
+
+    public class GetConfigData extends AsyncTask<String, Void, JSONArray> {
+
+        JSONArray jsonResponse = null;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pbWhileLoadingPrefs.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
+            pbWhileLoadingPrefs.bringToFront();
+            pbWhileLoadingPrefs.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        protected JSONArray doInBackground(String... connUrl) {
+
+            try{
+                jsonResponse = QueryUtils.getConfigData(connUrl[0]);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return jsonResponse;
+        }
+
+        protected void onPostExecute(JSONArray jResultArray){
+
+            if (pbWhileLoadingPrefs != null && pbWhileLoadingPrefs.isShown() == true) {
+                pbWhileLoadingPrefs.setVisibility(View.GONE);
+            }
+
+            if (jResultArray != null){
+                try{
+                    Map<String, String> configData = new HashMap<>();
+                    String host = null;
+                    String port = null;
+
+                    for (int i = 0; i < jResultArray.length(); i++){
+                        JSONObject jsn = jResultArray.getJSONObject(i);
+                        if (jsn.getString("Key").equals("host")){
+                            host = jsn.getString("Value");
+                            configData.put("Host", host);
+                            Log.d(LOG_TAG, "host: " + host);
+                        }
+
+                        if (jsn.getString("Key").equals("port")){
+                            port = jsn.getString("Value");
+                            configData.put("Port", port);
+                            Log.d(LOG_TAG, "port: " + port);
+                        }
+                    }
+
+                    saveUrlAndPort(host, port);
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
+            }
+        }
     }
 
     public class AuthorizeAccount extends AsyncTask<String, Void, String> {

@@ -5,12 +5,14 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -28,7 +30,6 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
     Spinner spinnerGWD;
 
     FloatingActionButton confirmItemInsert, takeImageScreenShot;
-    PhotoView itemScreenShot;
     EditText itemAsset;
     EditText itemArrived;
     EditText itemInvoice;
@@ -39,6 +40,7 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
     EditText itemBox;
     EditText itemContainer;
     EditText itemComments;
+    PhotoView itemScreenShot;
 
 
     @Override
@@ -99,6 +101,15 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
+    private String prepareImage(Bitmap itemImage){
+        String preparedImage = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        itemImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] imageBytes = baos.toByteArray();
+        preparedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        return preparedImage;
+    }
+
     public class AddItem extends AsyncTask<String, Void, String> {
 
         String id_response = null;
@@ -114,6 +125,7 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
         String ItemBox = itemBox.getText().toString();
         String ItemContainer = itemContainer.getText().toString();
         String ItemComments = itemComments.getText().toString();
+        String ItemImage = prepareImage(((BitmapDrawable)itemScreenShot.getDrawable()).getBitmap());
 
         ProgressBar pbWhileAddingItems;
 
@@ -145,6 +157,7 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
                 toolObject.put("Box", ItemBox);
                 toolObject.put("Container", ItemContainer);
                 toolObject.put("Comment", ItemComments);
+                toolObject.put("ItemImage", ItemImage);
 
                 id_response = QueryUtils.saveData(toolObject, connUrl[0], token);
             } catch (JSONException e) {

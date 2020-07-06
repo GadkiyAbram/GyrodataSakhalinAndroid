@@ -20,6 +20,9 @@ public class DataBaseHelper extends PrefActivity{
     public static String LOG_TAG = "mylogs";
     static final String APP_SETTINGS = "U_SETTING";
 
+    // Obtaining config data
+    public static final String PATH_CONFIG_DATA = "http://192.168.0.102:8081/AuthServices/AuthService.svc/sentConfig";
+
     // Authenticate
     public static final String PATH_AUTHENTICATE = "/AuthServices/AuthService.svc/Authenticate";
 
@@ -97,8 +100,9 @@ public class DataBaseHelper extends PrefActivity{
     public static final String ITEM_CONTAINER = "Container";
     public static final String ITEM_COMMENT = "Comment";
     public static final String ITEM_ITEM_IMAGE = "ItemImage";
+    public static final String ITEM_ITEM_CREATED = "Created_at";
 
-    // Leave as a Template
+    // Leave as a Template, don t remove
     static String connectString(String serverName,
                                 String ipAddress,
                                 String port,
