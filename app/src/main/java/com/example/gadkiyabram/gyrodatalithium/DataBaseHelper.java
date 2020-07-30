@@ -21,7 +21,9 @@ public class DataBaseHelper extends PrefActivity{
     static final String APP_SETTINGS = "U_SETTING";
 
     // Obtaining config data
+    // Local machine
     public static final String PATH_CONFIG_DATA = "http://192.168.0.102:8081/AuthServices/AuthService.svc/sentConfig";
+    public static final String PATH_CONFIG_DATA_AZURE = "http://demotestapi.cloudapp.net/AuthServices/AuthService.svc/sentConfig";
 
     // Authenticate
     public static final String PATH_AUTHENTICATE = "/AuthServices/AuthService.svc/Authenticate";
@@ -39,6 +41,9 @@ public class DataBaseHelper extends PrefActivity{
     public static final String PATH_JOB_ADD = "/jobservices/jobservice.svc/AddNewJob";
     public static final String PATH_JOB_INITIAL_DATA = "/JobServices/JobService.svc/GetAllDataForJobCreate";
 
+    //Query
+    public static final String PATH_QUERY = "?what=" + "" + "&where=" + "";
+
     /*Columns Battery Inventory,
         LBatteries table
     */
@@ -54,6 +59,8 @@ public class DataBaseHelper extends PrefActivity{
     public static final String BATTERY_ARRIVED = "Arrived";
     public static final String BATTERY_CONTAINER = "Container";
     public static final String BATTERY_COMMENT = "Comment";
+//    public static final String BATTERY_CREATED = "Created_at";
+//    public static final String BATTERY_UPDATED = "Updated_at";
 
     /*Columns GWD Jobs List,
         GWDTracker table
@@ -81,6 +88,8 @@ public class DataBaseHelper extends PrefActivity{
     public static final String JOB_RIG = "Rig";
     public static final String JOB_ISSUES = "Issues";
     public static final String JOB_COMMENT = "Comment";
+//    public static final String JOB_CREATED = "Created_at";
+//    public static final String JOB_UPDATED = "Updated_at";
 
     /*Columns GWD Tools List,
         Emp table
@@ -100,7 +109,13 @@ public class DataBaseHelper extends PrefActivity{
     public static final String ITEM_CONTAINER = "Container";
     public static final String ITEM_COMMENT = "Comment";
     public static final String ITEM_ITEM_IMAGE = "ItemImage";
-    public static final String ITEM_ITEM_CREATED = "Created_at";
+//    public static final String ITEM_ITEM_CREATED = "Created_at";
+//    public static final String ITEM_ITEM_UPDATED = "Updated_at";
+
+    // For All three Tables applicable (Items, Batteries, Jobs)
+    public static final String RECORD_ID = "Id";
+    public static final String RECORD_CREATED = "Created_at";
+    public static final String RECORD_UPDATED = "Updated_at";
 
     // Leave as a Template, don t remove
     static String connectString(String serverName,
@@ -131,8 +146,8 @@ public class DataBaseHelper extends PrefActivity{
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("http://")
                 .append(url)
-                .append(":")
-                .append(port)
+//                .append(":")
+//                .append(port)
                 .append(pathWorking);
         finalUrl = stringBuilder.toString();
         Log.d(DataBaseHelper.LOG_TAG, "FINAL URL ====== " + finalUrl);

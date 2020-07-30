@@ -23,6 +23,16 @@ public class JobModel {
     private String rig;
     private String issues;
     private String comments;
+    private String jobCreated;
+    private String jobUpdated;
+
+    public JobModel(int _id,
+                    String jobCreated,
+                    String jobUpdated) {
+        this._id = _id;
+        this.jobCreated = jobCreated;
+        this.jobUpdated = jobUpdated;
+    }
 
     public JobModel(int _id,
                     String jobN,
@@ -236,11 +246,23 @@ public class JobModel {
         this.rig = rig;
     }
 
-    public String getIssues() {
-        return issues;
+    public String getIssues() { return issues; }
+
+    public void setIssues(String issues) { this.issues = issues; }
+
+    public String getJobCreated() {
+        return jobCreated;
     }
 
-    public void setIssues(String issues) {
-        this.issues = issues;
+    public void setJobCreated(String jobCreated) {
+        this.jobCreated = jobCreated;
+    }
+
+    public String getJobUpdated() {
+        return jobUpdated;
+    }
+
+    public void setJobUpdated(String jobUpdated) {
+        this.jobUpdated= jobUpdated;
     }
 }

@@ -25,6 +25,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 import static com.example.gadkiyabram.gyrodatalithium.DataBaseHelper.LOG_TAG;
@@ -41,7 +44,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     String serverName, ipAddress, port, dbName, login, pass;
     String connection;
 
-    TextView tvCreatedAt, tvTotalItems;
+    ProgressBar progressBar;
+
+    TextView tvItemsCreatedAt, tvTotalItems,
+            tvBatteriesCreatedAt, tvTotalBatteries,
+            tvJobsCreatedAt, tvTotalJobs;
 
     RelativeLayout mainLayout;
 
@@ -88,8 +95,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fabMain.setOnClickListener(this);
 
-        tvCreatedAt = (TextView)findViewById(R.id.tools_updated);
+        // TextViews for Items
+        tvItemsCreatedAt = (TextView)findViewById(R.id.tools_updated);
         tvTotalItems = (TextView)findViewById(R.id.items_total);
+
+        // TextViews for Batteries
+        tvBatteriesCreatedAt = (TextView)findViewById(R.id.batteries_updated);
+        tvTotalBatteries = (TextView)findViewById(R.id.batteries_total);
+
+        // TextViews for Batteries
+        tvJobsCreatedAt = (TextView)findViewById(R.id.jobs_updated);
+        tvTotalJobs = (TextView)findViewById(R.id.jobs_total);
+
+        String urlFromSP = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_SELECTED_ITEMS);
 
 //        new TestTokenConnection().execute("http://192.168.0.100:8081/TestServices/TestTokenService.svc/Test");
     }
@@ -240,7 +258,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         Log.d(LOG_TAG, "MainActivity: onResume()");
-        new RecieveTools().execute("http://192.168.0.102:8081/toolServices/toolService.svc/GetCustomItems?what=" + "" + "&where=");
+        // TODO - refactor urls
+
+//        String urlItems = "http://192.168.0.102:8081/toolServices/toolService.svc/GetCustomItems?what=&where=";
+//        String urlBatteries = "http://192.168.0.102:8081/batteryservices/batteryservice.svc/GetSelectedBatteries?what=&where=";
+//        String urlJobs = "http://192.168.0.102:8081/jobservices/jobservice.svc/GetCustomJobData?what=&where=";
+        String urlItems = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_SELECTED_ITEMS) + DataBaseHelper.PATH_QUERY;
+        String urlBatteries = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_SELECTED_BATTERIES) + DataBaseHelper.PATH_QUERY;
+        String urlJobs = DataBaseHelper.getConnectionString(this, DataBaseHelper.PATH_SELECTED_JOBS) + DataBaseHelper.PATH_QUERY;
+//        new RecieveTools().execute("http://192.168.0.102:8081/toolServices/toolService.svc/GetCustomItems?what=" + "" + "&where=");
+        new RecieveTools().execute(urlItems, urlBatteries, urlJobs);
     }
 
     @Override
@@ -253,117 +280,166 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // TODO - REFACTOR THIS
 
-    public class RecieveTools extends AsyncTask<String, Void, JSONArray> {
+    public class RecieveTools extends AsyncTask<String, Void, Map<String, JSONArray>> {
 
-        ProgressBar pbWhileLoadingTools;
+        Map<String, JSONArray> initialData = new HashMap<>();
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//            pbWhileLoadingTools = (ProgressBar)findViewById(R.id.pbToolTest);
-//            pbWhileLoadingTools.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
-//            pbWhileLoadingTools.bringToFront();
-//            pbWhileLoadingTools.setVisibility(View.VISIBLE);
+            progressBar = (ProgressBar)findViewById(R.id.pbWaiting);
+            progressBar.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
+            progressBar.bringToFront();
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
-        protected JSONArray doInBackground(String... connUrl)
+        protected Map<String, JSONArray> doInBackground(String... connUrl)
         {
             shPreferences = getSharedPreferences(DataBaseHelper.APP_SETTINGS, MODE_PRIVATE);
             String token = shPreferences.getString("token", "");
-            if (connUrl.length < 1 || connUrl[0] == null){
+            if (connUrl.length < 1 || connUrl[0] == null || connUrl[1] == null || connUrl[2] == null){
                 return null;
             }
-            JSONArray jsonBatteriesArrayResult = null;
+            JSONArray jsonItemsDataArrayResult = null;
+            JSONArray jsonBatteriesDataArrayResult = null;
+            JSONArray jsonJobsDataArrayResult = null;
             try {
-                jsonBatteriesArrayResult = QueryUtils.getData(connUrl[0], token);
+                jsonItemsDataArrayResult = QueryUtils.getData(connUrl[0], token);
+                initialData.put("Items", jsonItemsDataArrayResult);
+                jsonBatteriesDataArrayResult = QueryUtils.getData(connUrl[1], token);
+                initialData.put("Batteries", jsonBatteriesDataArrayResult);
+                jsonJobsDataArrayResult = QueryUtils.getData(connUrl[2], token);
+                initialData.put("Jobs", jsonJobsDataArrayResult);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-            return jsonBatteriesArrayResult;
+            return initialData;
         }
 
-        protected void onPostExecute(JSONArray data) {
+        protected void onPostExecute(Map<String, JSONArray> data) {
             ArrayList<ToolModel> toolList = new ArrayList<>();
+            ArrayList<BatteryModel> batteryList = new ArrayList<>();
+            ArrayList<JobModel> jobList = new ArrayList<>();
 
-            if (data != null) {
+            JSONArray itemsInitial = data.get("Items");
+            JSONArray batteriesInitial = data.get("Batteries");
+            JSONArray jobsInitial = data.get("Jobs");
+
+            // Parsing Items info
+            if (itemsInitial != null) {
                 try {
-                    for (int i = 0; i < data.length(); i++) {
-                        JSONObject object = data.getJSONObject(i);
-                        int id = object.getInt(DataBaseHelper.ITEM_ID);
-                        String item = object.getString(DataBaseHelper.ITEM_ITEM);
-                        String asset = object.getString(DataBaseHelper.ITEM_ASSET);
-                        String arrived = object.getString(DataBaseHelper.ITEM_ARRIVED);
-                        String invoice = object.getString(DataBaseHelper.ITEM_INVOICE);
-                        String ccd = object.getString(DataBaseHelper.ITEM_CCD);
-                        float circulation = Float.parseFloat(object.getString(DataBaseHelper.ITEM_CIRCULATION));
-                        String nameRus = object.getString(DataBaseHelper.ITEM_NAMERUS);
-                        String positionCcd = object.getString(DataBaseHelper.ITEM_POSITION);
-                        String itemStatus = object.getString(DataBaseHelper.ITEM_STATUS);
-                        String box = object.getString(DataBaseHelper.ITEM_BOX);
-                        String container = object.getString(DataBaseHelper.ITEM_CONTAINER);
-                        String comment = object.getString(DataBaseHelper.ITEM_COMMENT);
-                        String itemIMage = object.getString(DataBaseHelper.ITEM_ITEM_IMAGE);
+                    for (int i = 0; i < itemsInitial.length(); i++) {
+                        JSONObject object = itemsInitial.getJSONObject(i);
+                        int id = object.getInt(DataBaseHelper.RECORD_ID);
                         //remove if issues
-                        String itemCreated = object.getString(DataBaseHelper.ITEM_ITEM_CREATED);
-                        Log.d(LOG_TAG, "Items updated: " + itemCreated);
+                        String itemCreated = object.getString(DataBaseHelper.RECORD_UPDATED);
+                        String itemUpdated = object.getString(DataBaseHelper.RECORD_UPDATED);
+                        Log.d(LOG_TAG, "Items updated: " + itemUpdated);
 
-                        toolList.add(new ToolModel(id, item, asset, arrived, circulation, invoice, ccd, nameRus,
-                                positionCcd, itemStatus, box, container, comment, itemIMage, itemCreated));
+                        toolList.add(new ToolModel(id, itemCreated, itemUpdated));
                     }
-
-                    // Getting last record in toolList
-                    String itemsUpdated = toolList.get(toolList.size() - 1).getItemCreated();
-                    String itemsInDB = String.valueOf(toolList.size());
-                    Log.d(LOG_TAG, "Items updated: " + itemsUpdated);
-                    Log.d(LOG_TAG, "Items total: " + itemsInDB);
-
-                    tvCreatedAt.setText(itemsUpdated);
-                    tvTotalItems.setText(itemsInDB);
-
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
 
                 if (toolList != null){
 
-//                    if (pbWhileLoadingTools != null && pbWhileLoadingTools.isShown() == true){
-//                        pbWhileLoadingTools.setVisibility(View.GONE);
-//                    }
+                    if (progressBar != null && progressBar.isShown() == true){
+                        progressBar.setVisibility(View.GONE);
+                    }
 
+                    // Getting last record in toolList
+                    String itemsUpdated = toolList.get(toolList.size() - 1).getItemUpdated();
+                    String itemsInDB = String.valueOf(toolList.size());
+                    Log.d(LOG_TAG, "Items updated: " + itemsUpdated);
+                    Log.d(LOG_TAG, "Items total: " + itemsInDB);
 
-
-//                    toolAdapter = new RecyclerToolAdapter(getApplicationContext(), toolList, new RVClickListener() {
-//                        @Override
-//                        public void onItemClick(View v, int postition) {
-//                            Log.d(DataBaseHelper.LOG_TAG, "selected: " + toolList.get(postition).getItemName());
-//
-//                            Intent intentToolDetails = new Intent(ToolActivity.this, ToolPreciseActivity.class);
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ID, String.valueOf(toolList.get(postition).get_id()));
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM, toolList.get(postition).getItemName());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ASSET, toolList.get(postition).getAsset());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CIRCULATION, String.valueOf(toolList.get(postition).getCircHrs()));
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ARRIVED, toolList.get(postition).getArrived());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_INVOICE, toolList.get(postition).getInvoice());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CCD, toolList.get(postition).getCcdNum());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_NAMERUS, toolList.get(postition).getNameRus());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_POSITION, toolList.get(postition).getPositionCCD());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_STATUS, toolList.get(postition).getLocation());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_BOX, toolList.get(postition).getBoxDesc());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_CONTAINER, toolList.get(postition).getContainer());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_COMMENT, toolList.get(postition).getComment());
-//                            intentToolDetails.putExtra(DataBaseHelper.ITEM_ITEM_IMAGE, toolList.get(postition).getItemImage());
-//
-//                            startActivity(intentToolDetails);
-//                        }
-//                    });
-//                    tRecyclerView.setAdapter(toolAdapter);
-//                    toolAdapter.notifyDataSetChanged();
+                    // Setting values above to TVs
+                    tvItemsCreatedAt.setText(itemsUpdated);
+                    tvTotalItems.setText(itemsInDB);
                 }else {
                     setContentView(R.layout.layout_no_connection);
                 }
             }
+
+            // Parsing Batteries info
+            if (batteriesInitial != null) {
+                try {
+                    for (int i = 0; i < batteriesInitial.length(); i++) {
+                        JSONObject object = batteriesInitial.getJSONObject(i);
+                        int id = object.getInt(DataBaseHelper.RECORD_ID);
+                        //remove if issues
+                        String batteryCreated = object.getString(DataBaseHelper.RECORD_CREATED);
+                        String batteryUpdated = object.getString(DataBaseHelper.RECORD_UPDATED);
+                        Log.d(LOG_TAG, "Batteries updated: " + batteryUpdated);
+
+                        batteryList.add(new BatteryModel(id, batteryCreated, batteryUpdated));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (toolList != null){
+
+                    if (progressBar != null && progressBar.isShown() == true){
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    // Getting last record in toolList
+                    String batteriesUpdated = batteryList.get(batteryList.size() - 1).getBatteryUpdated();
+                    String batteriesInDB = String.valueOf(batteryList.size());
+                    Log.d(LOG_TAG, "Batteries updated: " + batteriesUpdated);
+                    Log.d(LOG_TAG, "Batteries total: " + batteriesInDB);
+
+                    // Setting values above to TVs
+                    tvBatteriesCreatedAt.setText(batteriesUpdated);
+                    tvTotalBatteries.setText(batteriesInDB);
+
+                }else {
+                    setContentView(R.layout.layout_no_connection);
+                }
+            }
+
+            // Parsing Jobs info
+            if (jobsInitial != null) {
+                try {
+                    for (int i = 0; i < jobsInitial.length(); i++) {
+                        JSONObject object = jobsInitial.getJSONObject(i);
+                        int id = object.getInt(DataBaseHelper.RECORD_ID);
+                        //remove if issues
+                        String jobCreated = object.getString(DataBaseHelper.RECORD_UPDATED);
+                        String jobUpdated = object.getString(DataBaseHelper.RECORD_UPDATED);
+                        Log.d(LOG_TAG, "Batteries updated: " + jobUpdated);
+
+                        jobList.add(new JobModel(id, jobCreated, jobUpdated));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                if (toolList != null){
+
+                    if (progressBar != null && progressBar.isShown() == true){
+                        progressBar.setVisibility(View.GONE);
+                    }
+
+                    // Getting last record in toolList
+                    String jobsUpdated = jobList.get(jobList.size() - 1).getJobUpdated();
+                    String jobsInDB = String.valueOf(jobList.size());
+                    Log.d(LOG_TAG, "Batteries updated: " + jobsUpdated);
+                    Log.d(LOG_TAG, "Batteries total: " + jobsInDB);
+
+                    // Setting values above to TVs
+                    tvJobsCreatedAt.setText(jobsUpdated);
+                    tvTotalJobs.setText(jobsInDB);
+
+                }else {
+                    setContentView(R.layout.layout_no_connection);
+                }
+            }
+
         }
     }
 

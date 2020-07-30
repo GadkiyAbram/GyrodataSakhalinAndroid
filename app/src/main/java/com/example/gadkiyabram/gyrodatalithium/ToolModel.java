@@ -17,6 +17,7 @@ public class ToolModel {
     private String comment;
     private String itemImage;
     private String itemCreated;
+    private String itemUpdated;
 
 //    public ToolModel(int _id,
 //                     String itemName,
@@ -49,6 +50,13 @@ public class ToolModel {
 //    }
 
     public ToolModel(int _id,
+                     String created,
+                     String updated) {
+        this.itemCreated = created;
+        this.itemUpdated = updated;
+    }
+
+    public ToolModel(int _id,
                      String itemName,
                      String asset,
                      String arrived,
@@ -62,7 +70,8 @@ public class ToolModel {
                      String container,
                      String comment,
                      String itemImage,
-                     String created) {
+                     String created,
+                     String updated) {
         this._id = _id;
         this.itemName = itemName;
         this.asset = asset;
@@ -78,6 +87,7 @@ public class ToolModel {
         this.comment = comment;
         this.itemImage = itemImage;
         this.itemCreated = created;
+        this.itemUpdated = updated;
     }
 
     public int get_id() {
@@ -187,4 +197,8 @@ public class ToolModel {
     public String getItemCreated() { return itemCreated; }
 
     public void setItemCreated(String itemCreated){ this.itemCreated = itemCreated; }
+
+    public String getItemUpdated() { return itemUpdated; }
+
+    public void setItemUpdated(String itemUpdated){ this.itemCreated = itemUpdated; }
 }

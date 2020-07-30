@@ -158,10 +158,11 @@ public class ToolActivity extends AppCompatActivity implements View.OnClickListe
                         String container = object.getString(DataBaseHelper.ITEM_CONTAINER);
                         String comment = object.getString(DataBaseHelper.ITEM_COMMENT);
                         String itemImage = object.getString(DataBaseHelper.ITEM_ITEM_IMAGE);
-                        String itemCreated = object.getString(DataBaseHelper.ITEM_ITEM_CREATED);
+                        String itemCreated = object.getString(DataBaseHelper.RECORD_UPDATED);
+                        String itemUpdated = object.getString(DataBaseHelper.RECORD_UPDATED);
 
                         toolList.add(new ToolModel(id, item, asset, arrived, circulation, invoice, ccd, nameRus,
-                                positionCcd, itemStatus, box, container, comment, itemImage, itemCreated));
+                                positionCcd, itemStatus, box, container, comment, itemImage, itemCreated , itemUpdated));
                         Log.d(DataBaseHelper.LOG_TAG, "Image: " + itemImage);
                     }
                 } catch (JSONException e) {

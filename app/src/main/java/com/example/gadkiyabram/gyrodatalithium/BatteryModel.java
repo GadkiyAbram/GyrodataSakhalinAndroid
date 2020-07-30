@@ -14,8 +14,16 @@ public class BatteryModel {
     private String BatteryStatus;
     private String container;
     private String comment;
+    private String batteryCreated;
+    private String batteryUpdated;
 
-    public BatteryModel(){}
+    public BatteryModel(int id,
+                        String batteryCreated,
+                        String batteryUpdated){
+        this._id = id;
+        this.batteryCreated = batteryCreated;
+        this.batteryUpdated = batteryUpdated;
+    }
 
     public BatteryModel(int id,
                         String boxN,
@@ -125,5 +133,20 @@ public class BatteryModel {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getBatteryCreated() {
+        return batteryCreated;
+    }
+
+    public void setBatteryCreated(String batteryCreated) {
+        this.batteryCreated = batteryCreated;
+    }
+
+    public String getBatteryUpdated() {
+        return batteryUpdated;
+    }
+
+    public void setBatteryUpdated(String batteryUpdated) { this.batteryUpdated = batteryUpdated;
     }
 }

@@ -86,7 +86,7 @@
                     <EditText
                             android:id="@+id/etUserLogin"
                             android:hint="Login"
-                            android:text="user1"
+                            android:text="user14@user.com"
                             android:textSize="16dp"
                             android:backgroundTint="@color/textColorSerialNumber"
                             android:textAlignment="center"
@@ -104,7 +104,7 @@
                     <EditText
                             android:id="@+id/etUserPassword"
                             android:hint="Password"
-                            android:text="pass1"
+                            android:text="12341234"
                             android:textSize="16dp"
                             android:backgroundTint="@color/textColorSerialNumber"
                             android:textAlignment="center"

@@ -102,11 +102,15 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private String prepareImage(Bitmap itemImage){
-        String preparedImage = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        itemImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-        byte[] imageBytes = baos.toByteArray();
-        preparedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        String preparedImage = "";
+
+        if (itemImage != null){
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            itemImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+            byte[] imageBytes = baos.toByteArray();
+            preparedImage = Base64.encodeToString(imageBytes, Base64.DEFAULT);
+        }
+
         return preparedImage;
     }
 
@@ -125,7 +129,10 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
         String ItemBox = itemBox.getText().toString();
         String ItemContainer = itemContainer.getText().toString();
         String ItemComments = itemComments.getText().toString();
-        String ItemImage = prepareImage(((BitmapDrawable)itemScreenShot.getDrawable()).getBitmap());
+        String ItemImage = "";
+
+        // TODO - check if pic is null
+//        String ItemImage = prepareImage(((BitmapDrawable)itemScreenShot.getDrawable()).getBitmap());
 
         ProgressBar pbWhileAddingItems;
 
@@ -136,6 +143,7 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
             pbWhileAddingItems.setIndeterminateTintList(ColorStateList.valueOf(Color.RED));
             pbWhileAddingItems.bringToFront();
             pbWhileAddingItems.setVisibility(View.VISIBLE);
+
         }
 
         @Override
@@ -157,12 +165,17 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
                 toolObject.put("Box", ItemBox);
                 toolObject.put("Container", ItemContainer);
                 toolObject.put("Comment", ItemComments);
+                if (itemScreenShot.getDrawable() != null){
+                    ItemImage = prepareImage(((BitmapDrawable)itemScreenShot.getDrawable()).getBitmap());
+                    Log.d(DataBaseHelper.LOG_TAG, "ItemImage = " + ItemImage);
+                }
                 toolObject.put("ItemImage", ItemImage);
 
                 id_response = QueryUtils.saveData(toolObject, connUrl[0], token);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             return id_response;
         }
 
@@ -173,7 +186,7 @@ public class AddToolActivity extends AppCompatActivity implements View.OnClickLi
             }
 
             if (id_response != null){
-
+                Log.d(DataBaseHelper.LOG_TAG, "id_response = " + id_response);
                 Toast.makeText(AddToolActivity.this, "" + ItemItem + " " + ItemAsset + " saved", Toast.LENGTH_SHORT).show();
             }else {
                 Toast.makeText(AddToolActivity.this, "Unable to save", Toast.LENGTH_SHORT).show();

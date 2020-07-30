@@ -31,6 +31,8 @@ import java.util.Map;
 
 public class PrefActivity extends AppCompatActivity implements View.OnClickListener {
 
+    // TODO - refactor LOG_TAG, REMOVE IF NO NEED
+
     private final String LOG_TAG = "myLogs";
 
     TextView    tvUserToken;
@@ -93,7 +95,7 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
         getUrlAndPort();
 
 //        new GetConfigData().execute("http://192.168.0.102:8081/AuthServices/AuthService.svc/sentConfig");
-        new GetConfigData().execute(DataBaseHelper.PATH_CONFIG_DATA);
+        new GetConfigData().execute(DataBaseHelper.PATH_CONFIG_DATA_AZURE);
     }
 
     private void getUrlAndPort(){
@@ -189,14 +191,19 @@ public class PrefActivity extends AppCompatActivity implements View.OnClickListe
                         JSONObject jsn = jResultArray.getJSONObject(i);
                         if (jsn.getString("Key").equals("host")){
                             host = jsn.getString("Value");
+                            host = host.replace("http://", "");
                             configData.put("Host", host);
                             Log.d(LOG_TAG, "host: " + host);
                         }
 
                         if (jsn.getString("Key").equals("port")){
-                            port = jsn.getString("Value");
-                            configData.put("Port", port);
-                            Log.d(LOG_TAG, "port: " + port);
+                            if (jsn.getString("Key").isEmpty()){
+                                port = jsn.getString("Value");
+                                configData.put("Port", port);
+                                Log.d(LOG_TAG, "port: " + port);
+                            }
+                        }else {
+                            Log.d(LOG_TAG, "port is null");
                         }
                     }
 
