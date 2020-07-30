@@ -79,6 +79,7 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
                 if (rbInvoice.isChecked()){ where = "Invoice"; }
 //                new RecieveBatteries().execute("http://192.168.0.100:8081/batteryservices/batteryservice.svc/GetSelectedBatteries?what=" + etBatterySearch.getText() + "&where=" + where);
                 new RecieveBatteries().execute(battURL + "?what=" + etBatterySearch.getText() + "&where=" + where);
+                Log.d(DataBaseHelper.LOG_TAG, "" + etBatterySearch.getText());
             }
 
             @Override
@@ -125,6 +126,7 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
 
             return jsonBatteriesArrayResult;
         }
