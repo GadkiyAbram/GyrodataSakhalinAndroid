@@ -74,8 +74,8 @@ public class JobActivity extends AppCompatActivity implements View.OnClickListen
 
                     @Override
                     public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                        if (rbJobNum.isChecked()){ where = "Job Number";}
-                        if (rbGDP.isChecked()) { where = "GDP Sections"; }
+                        if (rbJobNum.isChecked()){ where = "JobNumber";}
+                        if (rbGDP.isChecked()) { where = "GDP"; }
                         if (rbModem.isChecked()) {where = "Modem";}
                         if (rbBBP.isChecked()){ where = "Bullplug"; }
                         if (rbBattery.isChecked()){ where = "Battery"; }
