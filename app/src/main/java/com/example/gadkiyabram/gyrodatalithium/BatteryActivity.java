@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.io.*;
 import java.net.HttpURLConnection;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 
 public class BatteryActivity extends AppCompatActivity implements View.OnClickListener {
@@ -73,18 +74,30 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//                if (rbSerialOne.isChecked()){ where = "Serial 1";}
+//                if (rbStatus.isChecked()) { where = "Status"; }
+//                if (rbCCD.isChecked()) {where = "CCD";}
+//                if (rbInvoice.isChecked()){ where = "Invoice"; }
+////                new RecieveBatteries().execute("http://192.168.0.100:8081/batteryservices/batteryservice.svc/GetSelectedBatteries?what=" + etBatterySearch.getText() + "&where=" + where);
+////                new BatteryActivity.RecieveBatteries().execute(battURL + "?what=" + etBatterySearch.getText().toString() + "&where=" + where);
+//                String battUrlupdt = MessageFormat.format("{0}?what={1}&where={2}", battURL, etBatterySearch.getText(), where);
+//                new BatteryActivity.RecieveBatteries().execute(battUrlupdt);
+////                new ToolActivity.RecieveTools().execute(urlFromSP + "?what=" + etItemSearch.getText() + "&where=" + where);
+//                Log.d(DataBaseHelper.LOG_TAG, "" + etBatterySearch.getText().toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (rbSerialOne.isChecked()){ where = "Serial 1";}
                 if (rbStatus.isChecked()) { where = "Status"; }
                 if (rbCCD.isChecked()) {where = "CCD";}
                 if (rbInvoice.isChecked()){ where = "Invoice"; }
 //                new RecieveBatteries().execute("http://192.168.0.100:8081/batteryservices/batteryservice.svc/GetSelectedBatteries?what=" + etBatterySearch.getText() + "&where=" + where);
-                new RecieveBatteries().execute(battURL + "?what=" + etBatterySearch.getText() + "&where=" + where);
-                Log.d(DataBaseHelper.LOG_TAG, "" + etBatterySearch.getText());
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
+//                new BatteryActivity.RecieveBatteries().execute(battURL + "?what=" + etBatterySearch.getText().toString() + "&where=" + where);
+                String battUrlupdt = MessageFormat.format("{0}?what={1}&where={2}", battURL, editable, where);
+                new BatteryActivity.RecieveBatteries().execute(battUrlupdt);
+//                new ToolActivity.RecieveTools().execute(urlFromSP + "?what=" + etItemSearch.getText() + "&where=" + where);
+                Log.d(DataBaseHelper.LOG_TAG, "" + editable);
             }
         });
     }
@@ -126,8 +139,7 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
-
+            
             return jsonBatteriesArrayResult;
         }
 
@@ -189,10 +201,6 @@ public class BatteryActivity extends AppCompatActivity implements View.OnClickLi
                     mRecyclerView.setAdapter(myAdapter);
                     myAdapter.notifyDataSetChanged();
                 }
-
-            }
-            else {
-                Log.d(DataBaseHelper.LOG_TAG, "Array is null");
             }
         }
     }
